@@ -14,6 +14,7 @@ namespace BMRP.Runtime
             this.useDynamicBatching = useDynamicBatching;
             this.useGPUInstancing = useGPUInstancing;
             GraphicsSettings.useScriptableRenderPipelineBatching = useSRPBatcher;
+            GraphicsSettings.lightsUseLinearIntensity = true;
         }
         
         protected override void Render(ScriptableRenderContext context, Camera[] cameras)

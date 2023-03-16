@@ -7,17 +7,19 @@ namespace BMRP.Runtime
     {
         private const string BufferName = "Render Camera";
 
-        private readonly CommandBuffer buffer = new CommandBuffer()
+        private readonly CommandBuffer buffer = new()
         {
             name = BufferName
         };
 
-        private static ShaderTagId unlitShaderTagID = new ShaderTagId("SRPDefaultUnlit");
-        private static ShaderTagId litShaderTagID = new ShaderTagId("BMLit");
+        private static readonly ShaderTagId UnlitShaderTagID = new("SRPDefaultUnlit");
+        private static readonly ShaderTagId LitShaderTagID = new("BMLit");
 
         private ScriptableRenderContext context;
         private Camera camera;
         private CullingResults cullingResults;
+
+        private readonly Lighting lighting = new();
 
         public void Render(ScriptableRenderContext context, Camera camera, bool useDynamicBatching, bool useGPUInstancing)
         {
@@ -29,6 +31,7 @@ namespace BMRP.Runtime
             if (!Cull()) return;
 
             Setup();
+            lighting.Setup(context, cullingResults);
             DrawVisibleGeometry(useDynamicBatching, useGPUInstancing);
             DrawUnsupportedShaders();
             DrawGizmos();
@@ -50,12 +53,12 @@ namespace BMRP.Runtime
             {
                 criteria = SortingCriteria.CommonOpaque
             };
-            var drawingSettings = new DrawingSettings(unlitShaderTagID, sortingSettings)
+            var drawingSettings = new DrawingSettings(UnlitShaderTagID, sortingSettings)
             {
                 enableDynamicBatching = useDynamicBatching,
                 enableInstancing = useGPUInstancing,
             };
-            drawingSettings.SetShaderPassName(1, litShaderTagID);
+            drawingSettings.SetShaderPassName(1, LitShaderTagID);
             var filteringSettings = new FilteringSettings(RenderQueueRange.opaque);
 
             context.DrawRenderers(cullingResults, ref drawingSettings, ref filteringSettings);
