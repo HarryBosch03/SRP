@@ -21,20 +21,25 @@ namespace BMRP.Runtime
 
         private readonly Lighting lighting = new();
 
-        public void Render(ScriptableRenderContext context, Camera camera, bool useDynamicBatching, bool useGPUInstancing)
+        public void Render(ScriptableRenderContext context, Camera camera, bool useDynamicBatching, bool useGPUInstancing, ShadowSettings shadows)
         {
             this.context = context;
             this.camera = camera;
             
             PrepareBuffer();
             PrepareForSceneWindow();
-            if (!Cull()) return;
-
+            if (!Cull(shadows.maxDistance)) return;
+            
+            buffer.BeginSample(SampleName);
+            ExecuteBuffer();
+            lighting.Setup(context, cullingResults, shadows);
+            buffer.EndSample(SampleName);
+            
             Setup();
-            lighting.Setup(context, cullingResults);
             DrawVisibleGeometry(useDynamicBatching, useGPUInstancing);
             DrawUnsupportedShaders();
             DrawGizmos();
+            lighting.Cleanup();
             Submit();
         }
 
@@ -49,6 +54,7 @@ namespace BMRP.Runtime
 
         private void DrawVisibleGeometry(bool useDynamicBatching, bool useGPUInstancing)
         {
+            return;
             var sortingSettings = new SortingSettings(camera)
             {
                 criteria = SortingCriteria.CommonOpaque
@@ -85,10 +91,11 @@ namespace BMRP.Runtime
             buffer.Clear();
         }
 
-        private bool Cull()
+        private bool Cull(float maxShadowDistance)
         {
             if (!camera.TryGetCullingParameters(out var p)) return false;
 
+            p.shadowDistance = Mathf.Min(maxShadowDistance, camera.farClipPlane);
             cullingResults = context.Cull(ref p);
             return true;
         }

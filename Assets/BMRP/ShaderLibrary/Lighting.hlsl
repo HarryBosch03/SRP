@@ -4,16 +4,17 @@
 #include "../ShaderLibrary/Light.hlsl"
 #include "../ShaderLibrary/Surface.hlsl"
 
-float3 IncomingLight (Surface surface, Light light) {
+float3 IncomingLight (const Surface surface, const Light light)
+{
 	return saturate(dot(surface.normal, light.direction)) * light.color;
 }
 
-float3 GetLighting (Surface surface, BRDF brdf, Light light)
+float3 GetLighting (const Surface surface, const BRDF brdf, const Light light)
 {
-	return IncomingLight(surface, light) * brdf.diffuse;
+	return IncomingLight(surface, light) * DirectBRDF(surface, brdf, light);
 }
 
-float3 GetLighting (Surface surface, BRDF brdf)
+float3 GetLighting (const Surface surface, const BRDF brdf)
 {
 	float3 color = 0.0f;
 	for (int i = 0; i < GetDirectionalLightCount(); i++)

@@ -8,11 +8,14 @@ namespace BMRP.Runtime
         private readonly CameraRenderer renderer = new CameraRenderer();
 
         bool useDynamicBatching, useGPUInstancing;
+        private ShadowSettings shadows;
         
-        public BmrPipeline(bool useDynamicBatching, bool useGPUInstancing, bool useSRPBatcher)
+        public BmrPipeline(bool useDynamicBatching, bool useGPUInstancing, bool useSRPBatcher, ShadowSettings shadows)
         {
             this.useDynamicBatching = useDynamicBatching;
             this.useGPUInstancing = useGPUInstancing;
+            this.shadows = shadows;
+            
             GraphicsSettings.useScriptableRenderPipelineBatching = useSRPBatcher;
             GraphicsSettings.lightsUseLinearIntensity = true;
         }
@@ -21,7 +24,7 @@ namespace BMRP.Runtime
         {
             foreach (var camera in cameras)
             {
-                renderer.Render(context, camera, useDynamicBatching, useGPUInstancing);
+                renderer.Render(context, camera, useDynamicBatching, useGPUInstancing, shadows);
             }
         }
     }

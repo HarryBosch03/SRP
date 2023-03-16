@@ -30,4 +30,6 @@ Shader "BMRP/Unlit"
             ENDHLSL
         }   
     }
+    
+    CustomEditor "BMRP.Editor.ShaderGUIWithPresets"
 }

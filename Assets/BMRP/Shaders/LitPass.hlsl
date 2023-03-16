@@ -14,7 +14,7 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
     UNITY_DEFINE_INSTANCED_PROP(float4, _BaseColor)
     UNITY_DEFINE_INSTANCED_PROP(float, _Cutoff)
     UNITY_DEFINE_INSTANCED_PROP(float, _Metallic)
-    UNITY_DEFINE_INSTANCED_PROP(float, _Smoothness)
+    UNITY_DEFINE_INSTANCED_PROP(float, _Roughness)
 UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 
 struct Attributes {
@@ -26,6 +26,7 @@ struct Attributes {
 
 struct Varyings {
     float4 positionCS : SV_POSITION;
+	float3 positionWS : VAR_POSITION;
 	float3 normalWS : VAR_NORMAL;
     float2 baseUV : VAR_BASE_UV;
     UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -37,8 +38,8 @@ Varyings LitVert (Attributes i)
     UNITY_SETUP_INSTANCE_ID(i);
     UNITY_TRANSFER_INSTANCE_ID(i, output);
     
-    float3 positionWS = TransformObjectToWorld(i.positionOS.xyz);
-    o.positionCS = TransformWorldToHClip(positionWS);
+    o.positionWS = TransformObjectToWorld(i.positionOS.xyz);
+    o.positionCS = TransformWorldToHClip(o.positionWS);
     
     float4 baseST = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseMap_ST);
     o.baseUV = i.baseUV * baseST.xy + baseST.zw;
@@ -61,12 +62,18 @@ float4 LitFrag (Varyings i) : SV_TARGET
 
     Surface surface;
     surface.normal = normalize(i.normalWS);
+    surface.viewDirection = normalize(_WorldSpaceCameraPos - i.positionWS);
     surface.color = base.rgb;
     surface.alpha = base.a;
     surface.metallic = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _Metallic);
-    surface.smoothness = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _Smoothness);
+    surface.roughness = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _Roughness);
 
-    float3 color = GetLighting(surface);
+#if defined(_PREMULTIPLY_ALPHA)
+    BRDF brdf = GetBRDF(surface, true);
+#else
+    BRDF brdf = GetBRDF(surface);
+#endif
+    float3 color = GetLighting(surface, brdf);
     return float4(color, surface.alpha);
 }
 
