@@ -24,9 +24,9 @@ float3 GetLighting (const Surface surfaceWS, const BRDF brdf, GI gi)
 		color += GetLighting(surfaceWS, brdf, light);
 	}
 
-	for (int i = 0; i < GetOtherLightCount(); i++)
+	for (int j = 0; j < GetOtherLightCount(); j++)
 	{
-		const Light light = GetOtherLight(i, surfaceWS, shadowData);
+		const Light light = GetOtherLight(j, surfaceWS, shadowData);
 		color += GetLighting(surfaceWS, brdf, light);
 	}
 	

@@ -16,25 +16,20 @@ namespace BMRP.Runtime
 
         private const int MaxDirLightCount = 4, MaxOtherLightCount = 64;
 
-        private static readonly int
-            DirLightCountId = Shader.PropertyToID("_DirectionalLightCount"),
-            DirLightColorsId = Shader.PropertyToID("_DirectionalLightColors"),
-            DirLightDirectionsId = Shader.PropertyToID("_DirectionalLightDirections"),
-            DirLightShadowDataId = Shader.PropertyToID("_DirectionalLightShadowData"),
-            OtherLightCountId = Shader.PropertyToID("_OtherLightCount"),
-            OtherLightColorsId = Shader.PropertyToID("_OtherLightColors"),
-            OtherLightPositionId = Shader.PropertyToID("_OtherLightPositions"),
-            OtherLightDirectionsId = Shader.PropertyToID("_OtherLightDirections"),
-            OtherLightSpotAnglesId = Shader.PropertyToID("_OtherLightSpotAngles");
-
-        private static readonly Vector4[]
-            DirLightColors = new Vector4[MaxDirLightCount],
-            DirLightDirections = new Vector4[MaxDirLightCount],
-            DirLightShadowData = new Vector4[MaxDirLightCount],
-            OtherLightColors = new Vector4[MaxOtherLightCount],
-            OtherLightPositions = new Vector4[MaxOtherLightCount],
-            OtherLightDirections = new Vector4[MaxOtherLightCount],
-            OtherLightSpotAngles = new Vector4[MaxOtherLightCount];
+        private static readonly ShaderInt
+            DirLightCount = new("_DirectionalLightCount", MaxDirLightCount),
+            OtherLightCount = new("_OtherLightCount", MaxOtherLightCount);
+        
+        private static readonly ShaderVectorArray
+            DirLightColors = new("_DirectionalLightColors", MaxDirLightCount),
+            DirLightDirections = new("_DirectionalLightDirections", MaxDirLightCount),
+            DirLightShadowData = new("_DirectionalLightShadowData", MaxDirLightCount),
+            
+            OtherLightColors = new("_OtherLightColors", MaxOtherLightCount),
+            OtherLightPositions = new("_OtherLightPositions", MaxOtherLightCount),
+            OtherLightDirections = new("_OtherLightDirections", MaxOtherLightCount),
+            OtherLightSpotAngles = new("_OtherLightSpotAngles", MaxOtherLightCount),
+            OtherLightShadowData = new("_OtherLightShadowData", MaxOtherLightCount);
 
         private CullingResults cullingResults;
 
@@ -81,21 +76,17 @@ namespace BMRP.Runtime
                 }
             }
 
-            buffer.SetGlobalInt(DirLightCountId, directionalLightCount);
+            ShaderProperty.ActiveBuffer = buffer;
+            DirLightCount.Send(directionalLightCount);
             if (directionalLightCount > 0)
             {
-                buffer.SetGlobalVectorArray(DirLightColorsId, DirLightColors);
-                buffer.SetGlobalVectorArray(DirLightDirectionsId, DirLightDirections);
-                buffer.SetGlobalVectorArray(DirLightShadowDataId, DirLightShadowData);
+                ShaderProperty.SendAll(DirLightColors, DirLightDirections, DirLightShadowData);
             }
             
-            buffer.SetGlobalInt(OtherLightCountId, otherLightCount);
+            OtherLightCount.Send(otherLightCount);
             if (otherLightCount > 0)
             {
-                buffer.SetGlobalVectorArray(OtherLightColorsId, OtherLightColors);
-                buffer.SetGlobalVectorArray(OtherLightPositionId, OtherLightPositions);
-                buffer.SetGlobalVectorArray(OtherLightDirectionsId, OtherLightDirections);
-                buffer.SetGlobalVectorArray(OtherLightSpotAnglesId, OtherLightSpotAngles);
+                ShaderProperty.SendAll(OtherLightColors, OtherLightPositions, OtherLightDirections, OtherLightSpotAngles, OtherLightShadowData);
             }
         }
 
@@ -115,6 +106,9 @@ namespace BMRP.Runtime
             OtherLightPositions[index] = position;
 
             OtherLightSpotAngles[index] = new Vector4(0.0f, 1.0f);
+
+            var light = visibleLight.light;
+            OtherLightShadowData[index] = shadows.ReserverOtherShadows(light, index);
         }
         
         private void SetupPointLight(int index, ref VisibleLight visibleLight)

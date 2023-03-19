@@ -40,7 +40,7 @@ Shader "BMRP/Lit"
     {
         HLSLINCLUDE
         #include "../ShaderLibrary/Common.hlsl"
-		#include "../Shaders/LitInput.hlsl"
+		#include "LitInput.hlsl"
         ENDHLSL
         
         Pass
@@ -66,7 +66,9 @@ Shader "BMRP/Lit"
             #pragma vertex LitVert
             #pragma fragment LitFrag
 
-            #include "LitPass.hlsl"
+            #include "LitCommon.hlsl"
+            #include "LitVert.hlsl"
+            #include "LitFrag.hlsl"
             
             ENDHLSL
         }   

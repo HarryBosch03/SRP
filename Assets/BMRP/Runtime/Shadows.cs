@@ -22,22 +22,20 @@ namespace BMRP.Runtime
 
         private readonly ShadowedDirectionalLight[] shadowedDirectionalLights = new ShadowedDirectionalLight[MaxShadowedDirectionalLightCount];
 
-        private static readonly int
-            DirShadowAtlasId = Shader.PropertyToID("_DirectionalShadowAtlas"),
-            DirShadowMatricesId = Shader.PropertyToID("_DirectionalShadowMatrices"),
-            CascadeCountId = Shader.PropertyToID("_CascadeCount"),
-            CascadeCullingSpheresId = Shader.PropertyToID("_CascadeCullingSpheres"),
-            CascadeDataId = Shader.PropertyToID("_CascadeData"),
-            ShadowAtlasSizeId = Shader.PropertyToID("_ShadowAtlasSize"),
-            ShadowDistanceFadeId = Shader.PropertyToID("_ShadowDistanceFade");
+        private static readonly int DirShadowAtlasId = Shader.PropertyToID("_DirectionalShadowAtlas");
 
-        private static readonly Matrix4x4[]
-            DirShadowMatrices = new Matrix4x4[MaxShadowedDirectionalLightCount * MaxCascades];
+        private static readonly ShaderInt CascadeCount = new("_CascadeCount");
+            
+        private static readonly ShaderVector
+            ShadowAtlasSize = new("_ShadowAtlasSize"),
+            ShadowDistanceFade = new("_ShadowDistanceFade");
 
-        private static readonly Vector4[] 
-            CascadeCullingSpheres = new Vector4[MaxCascades],
-            CascadeData = new Vector4[MaxCascades];
-
+        private static readonly ShaderVectorArray
+            CascadeCullingSpheres = new("_CascadeCullingSpheres", MaxCascades),
+            CascadeData = new("_CascadeData", MaxCascades);
+        
+        private static readonly ShaderMatrixArray DirShadowMatrices = new("_DirectionalShadowMatrices", MaxShadowedDirectionalLightCount * MaxCascades);
+        
         private static readonly string[] DirectionalFilterKeywords = 
         {
             "_DIRECTIONAL_PCF3",
@@ -110,6 +108,19 @@ namespace BMRP.Runtime
             };
         }
 
+        public Vector4 ReserverOtherShadows(Light light, int visibleLightIndex)
+        {
+            if (light.shadows == LightShadows.None) return Vector4.zero;
+            if (light.shadowStrength <= 0.0f) return Vector4.zero;
+
+            var output = light.bakingOutput;
+            if (output.lightmapBakeType != LightmapBakeType.Mixed) return Vector4.zero;
+            if (output.mixedLightingMode != MixedLightingMode.Shadowmask) return Vector4.zero;
+
+            useShadowMask = true;
+            return new Vector4(light.shadowStrength, 0.0f, 0.0f, output.occlusionMaskChannel);
+        }
+
         private struct ShadowedDirectionalLight
         {
             public int VisibleLightIndex;
@@ -146,17 +157,15 @@ namespace BMRP.Runtime
                 RenderDirectionalShadows(i, split, tileSize);
             }
             
-            buffer.SetGlobalInt(CascadeCountId, settings.directional.cascadeCount);
-            buffer.SetGlobalVectorArray(CascadeCullingSpheresId, CascadeCullingSpheres);
-            buffer.SetGlobalVectorArray(CascadeDataId, CascadeData);
+            CascadeCount.Send(settings.directional.cascadeCount);
+            ShaderProperty.SendAll(CascadeCullingSpheres, CascadeData, DirShadowMatrices);
 
-            buffer.SetGlobalMatrixArray(DirShadowMatricesId, DirShadowMatrices);
             var f = 1.0f - settings.directional.cascadeFade;
-            buffer.SetGlobalVector(ShadowDistanceFadeId, new Vector4(1.0f / settings.maxDistance, 1.0f / settings.distanceFade, 1.0f / (1.0f - f * f)));
+            ShadowDistanceFade.Send(new Vector4(1.0f / settings.maxDistance, 1.0f / settings.distanceFade, 1.0f / (1.0f - f * f)));
 
             SetKeywords(DirectionalFilterKeywords, (int)settings.directional.filter - 1);
             SetKeywords(CascadeBlendKeywords, (int)settings.directional.cascadeBlend - 1);
-            buffer.SetGlobalVector(ShadowAtlasSizeId, new Vector4(atlasSize, 1.0f / atlasSize));
+            ShadowAtlasSize.Send(new Vector4(atlasSize, 1.0f / atlasSize));
             buffer.EndSample(BufferName);
             ExecuteBuffer();
         }

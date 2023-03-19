@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 488e0a8471652a546b128b0f2215c303, type: 2}
+  m_LightingDataAsset: {fileID: 0}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 93e6e844aa931124690019373a7f0b3c, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -404,14 +404,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 131415015}
-  m_LocalRotation: {x: 0.15194383, y: 0.41966474, z: 0.071485035, w: 0.89201146}
-  m_LocalPosition: {x: -13.59736, y: 0.13667275, z: -4.8931556}
+  m_LocalRotation: {x: 0.099242724, y: 0.41589656, z: 0.1473395, w: 0.8918924}
+  m_LocalPosition: {x: -13.59736, y: 0.1366726, z: -4.8931556}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 12.185, y: 52.015, z: 15.126}
+  m_LocalEulerAnglesHint: {x: 3.123, y: 50.557, z: 20.236}
 --- !u!1 &143902027
 GameObject:
   m_ObjectHideFlags: 0
@@ -1203,7 +1203,7 @@ ReflectionProbe:
   m_TimeSlicingMode: 0
   m_Resolution: 128
   m_UpdateFrequency: 0
-  m_BoxSize: {x: 14, y: 8, z: 18}
+  m_BoxSize: {x: 14, y: 7.9, z: 18}
   m_BoxOffset: {x: 0, y: 0, z: -1}
   m_NearClip: 0.3
   m_FarClip: 1000
