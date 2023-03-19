@@ -13,13 +13,15 @@ Shader "BMRP/Lit"
     	[NoScaleOffset] _NormalMap("Normals", 2D) = "bump" {}
 		_NormalScale("Normal Scale", float) = 1
     	
-    	_DetailMap("Details", 2D) = "linearGrey" {}
-    	_DetailAlbedo("Detail Albedo", Range(0, 1)) = 1
-		_DetailSmoothness("Detail Smoothness", Range(0, 1)) = 1
-    	
         [NoScaleOffset] _EmissionMap("Emission", 2D) = "white" {}
 		_EmissionColor("Emission", Color) = (0.0, 0.0, 0.0, 0.0)
 		_EmissionBrightness("Emission Brightness", float) = 0.0
+    	
+    	_DetailMap("Details", 2D) = "linearGrey" {}
+    	[NoScaleOffset] _DetailNormalMap ("Detail Normal Map", 2D) = "bump" {}
+    	_DetailAlbedo("Detail Albedo", Range(0, 1)) = 1
+		_DetailSmoothness("Detail Smoothness", Range(0, 1)) = 1
+		_DetailNormalScale("Detail Normal Scale", float) = 1
         
         _Cutoff ("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
         [Toggle(_CLIPPING)] _Clipping ("Alpha Clipping", Float) = 0

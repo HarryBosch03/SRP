@@ -12,6 +12,7 @@ struct Attributes
 {
     float3 positionOS : POSITION;
 	float3 normalOS : NORMAL;
+	float4 tangentOS : TANGENT;
     float2 baseUV : TEXCOORD0;
     float2 detailUV : TEXCOORD1;
 
@@ -24,6 +25,7 @@ struct Varyings
     float4 positionCS : SV_POSITION;
 	float3 positionWS : VAR_POSITION;
 	float3 normalWS : VAR_NORMAL;
+	float4 tangentWS : VAR_TANGENT;
     float2 baseUV : VAR_BASE_UV;
     float2 detailUV : VAR_DETAIL_UV;
 
@@ -45,6 +47,7 @@ Varyings LitVert (Attributes i)
     o.detailUV = TransformDetailUV(i.detailUV);
     
     o.normalWS = TransformObjectToWorldNormal(i.normalOS);
+    o.tangentWS = float4(TransformObjectToWorldDir(i.tangentOS.xyz), i.tangentOS.w);
     
     return o;
 }
@@ -59,9 +62,12 @@ float4 LitFrag (Varyings i) : SV_TARGET
     clip(base.a - GetCutoff(i.baseUV));
     #endif
 
+    float3 normalWS = normalize(i.normalWS);
+    
     Surface surface;
     surface.position = i.positionWS;
-    surface.normal = normalize(i.normalWS);
+    surface.normal = NormalTangentToWorld(GetNormalTS(i.baseUV, i.detailUV), normalWS, i.tangentWS);
+    surface.interpolatedNormal = normalWS;
     surface.viewDirection = normalize(_WorldSpaceCameraPos - i.positionWS);
     surface.depth = -TransformWorldToView(i.positionWS).z;
     surface.color = base.rgb;

@@ -50,4 +50,11 @@ float3 DecodeNormal (float4 sample, float scale)
 #endif
 }
 
+float3 NormalTangentToWorld (const float3 normalTS, const float3 normalWS, const float4 tangentWS)
+{
+    const float3x3 tangentToWorld =
+        CreateTangentToWorld(normalWS, tangentWS.xyz, tangentWS.w);
+    return TransformTangentToWorld(normalTS, tangentToWorld);
+}
+
 #endif

@@ -3,7 +3,7 @@ using UnityEngine.Rendering;
 
 namespace BMRP.Runtime
 {
-    public class BmrPipeline : RenderPipeline
+    public partial class BmrPipeline : RenderPipeline
     {
         private readonly CameraRenderer renderer = new CameraRenderer();
 
@@ -22,6 +22,8 @@ namespace BMRP.Runtime
             GraphicsSettings.lightsUseLinearIntensity = true;
 
             QualitySettings.shadows = ShadowQuality.All;
+            
+            InitializeForEditor();
         }
         
         protected override void Render(ScriptableRenderContext context, Camera[] cameras)
