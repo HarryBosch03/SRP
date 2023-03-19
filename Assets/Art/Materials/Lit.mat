@@ -9,9 +9,11 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Lit
   m_Shader: {fileID: 4800000, guid: e11b0ac366dbf3244860e6ea2c87cd46, type: 3}
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_ValidKeywords:
+  - _RECEIVE_SHADOWS
+  m_InvalidKeywords:
+  - _SHADOWS_ON
+  m_LightmapFlags: 6
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -67,6 +69,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _EmissionBrightness: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -75,7 +78,9 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _PremulAlpha: 0
+    - _ReceiveShadows: 1
     - _Roughness: 1
+    - _Shadows: 0
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -83,7 +88,8 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 10}
+    - _BaseColor: {r: 0.67058825, g: 0.67058825, b: 0.67058825, a: 10}
     - _Color: {r: 1, g: 0.77412665, b: 0, a: 1}
+    - _EmissionBrightness: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

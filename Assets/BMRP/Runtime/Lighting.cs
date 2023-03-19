@@ -1,4 +1,3 @@
-using PlasticGui;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -18,11 +17,13 @@ namespace BMRP.Runtime
         private static readonly int
             DirLightCountId = Shader.PropertyToID("_DirectionalLightCount"),
             DirLightColorsId = Shader.PropertyToID("_DirectionalLightColors"),
-            DirLightDirectionsId = Shader.PropertyToID("_DirectionalLightDirections");
+            DirLightDirectionsId = Shader.PropertyToID("_DirectionalLightDirections"),
+            DirLightShadowDataId =  Shader.PropertyToID("_DirectionalLightShadowData");
 
         private static readonly Vector4[]
             DirLightColors = new Vector4[MaxDirLightCount],
-            DirLightDirections = new Vector4[MaxDirLightCount];
+            DirLightDirections = new Vector4[MaxDirLightCount],
+            DirLightShadowData = new Vector4[MaxDirLightCount];
 
         private CullingResults cullingResults;
 
@@ -43,24 +44,27 @@ namespace BMRP.Runtime
         private void SetupLights()
         {
             var visibleLights = cullingResults.visibleLights;
-            int i;
-            for (i = 0; i < visibleLights.Length; i++)
+            
+            var directionalLightCount = 0;
+            for (var i = 0; i < visibleLights.Length; i++)
             {
                 var light = visibleLights[i];
-                if (light.lightType == LightType.Directional) SetupDirectionalLight(i, ref light);
-                if (i >= MaxDirLightCount) break;
+                if (light.lightType == LightType.Directional) SetupDirectionalLight(directionalLightCount++, ref light);
+                if (directionalLightCount >= MaxDirLightCount) break;
             }
         
-            buffer.SetGlobalInt(DirLightCountId, i);
+            buffer.SetGlobalInt(DirLightCountId, directionalLightCount);
             buffer.SetGlobalVectorArray(DirLightColorsId, DirLightColors);
             buffer.SetGlobalVectorArray(DirLightDirectionsId, DirLightDirections);
+            
+            buffer.SetGlobalVectorArray(DirLightShadowDataId, DirLightShadowData);
         }
 
         private void SetupDirectionalLight(int index, ref VisibleLight light)
         {
             DirLightColors[index] = light.finalColor;
             DirLightDirections[index] = -light.localToWorldMatrix.GetColumn(2); 
-            shadows.ReserveDirectionalShadows(light.light, index);
+            DirLightShadowData[index] = shadows.ReserveDirectionalShadows(light.light, index);
         }
 
         public void Cleanup()

@@ -1,13 +1,12 @@
 #ifndef CUSTOM_BRDF_INCLUDED
 #define CUSTOM_BRDF_INCLUDED
 
-#include "Surface.hlsl"
-#include "Light.hlsl"
-
 struct BRDF {
     float3 diffuse;
     float3 specular;
     float roughness;
+    float perceptualRoughness;
+    float fresnel;
 };
 
 #define MIN_REFLECTIVITY 0.04
@@ -21,12 +20,16 @@ BRDF GetBRDF (const Surface surface, const bool premultiplyAlpha = false)
 {
     BRDF brdf;
 
+    float oneMinusReflectivity = OneMinusReflectivity(surface.metallic);
     brdf.diffuse = surface.color * OneMinusReflectivity(surface.metallic);
     brdf.specular = lerp(MIN_REFLECTIVITY, surface.color, surface.metallic);
     brdf.roughness = surface.roughness;
-
+    brdf.perceptualRoughness = PerceptualRoughnessToRoughness(surface.roughness);
+    
     if (premultiplyAlpha)
         brdf.diffuse *= surface.alpha;
+
+    brdf.fresnel = saturate(2.0 - surface.roughness - oneMinusReflectivity);
     
     return brdf;
 }
@@ -45,6 +48,15 @@ float SpecularStrength (const Surface surface, const BRDF brdf, const Light ligh
 float3 DirectBRDF (const Surface surface, const BRDF brdf, const Light light)
 {
     return SpecularStrength(surface, brdf, light) * brdf.specular + brdf.diffuse;
+}
+
+float3 IndirectBRDF (Surface surface, const BRDF brdf, const float3 diffuse, float3 specular)
+{
+    float fresnelStrength = surface.fresnelStrength * Pow4(1.0 - saturate(dot(surface.normal, surface.viewDirection)));
+    float3 reflection = specular * lerp(brdf.specular, brdf.fresnel, fresnelStrength);
+    
+    reflection /= brdf.roughness * brdf.roughness + 1.0f;
+    return (diffuse * brdf.diffuse + reflection) * surface.occlusion;
 }
 
 #endif

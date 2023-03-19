@@ -7,8 +7,10 @@ namespace BMRP.Runtime
     {
         private readonly CameraRenderer renderer = new CameraRenderer();
 
-        bool useDynamicBatching, useGPUInstancing;
-        private ShadowSettings shadows;
+        private readonly bool 
+            useDynamicBatching, 
+            useGPUInstancing;
+        private readonly ShadowSettings shadows;
         
         public BmrPipeline(bool useDynamicBatching, bool useGPUInstancing, bool useSRPBatcher, ShadowSettings shadows)
         {
@@ -18,6 +20,8 @@ namespace BMRP.Runtime
             
             GraphicsSettings.useScriptableRenderPipelineBatching = useSRPBatcher;
             GraphicsSettings.lightsUseLinearIntensity = true;
+
+            QualitySettings.shadows = ShadowQuality.All;
         }
         
         protected override void Render(ScriptableRenderContext context, Camera[] cameras)

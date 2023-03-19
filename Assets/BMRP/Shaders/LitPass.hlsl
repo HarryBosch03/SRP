@@ -1,34 +1,33 @@
 #ifndef CUSTOM_LIT_PASS_INCLUDED
 #define CUSTOM_LIT_PASS_INCLUDED
 
-#include "../ShaderLibrary/Common.hlsl"
 #include "../ShaderLibrary/Surface.hlsl"
+#include "../ShaderLibrary/Shadows.hlsl"
+#include "../ShaderLibrary/Light.hlsl"
 #include "../ShaderLibrary/BRDF.hlsl"
+#include "../ShaderLibrary/GI.hlsl"
 #include "../ShaderLibrary/Lighting.hlsl"
 
-TEXTURE2D(_BaseMap);
-SAMPLER(sampler_BaseMap);
-
-UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
-    UNITY_DEFINE_INSTANCED_PROP(float4, _BaseMap_ST)
-    UNITY_DEFINE_INSTANCED_PROP(float4, _BaseColor)
-    UNITY_DEFINE_INSTANCED_PROP(float, _Cutoff)
-    UNITY_DEFINE_INSTANCED_PROP(float, _Metallic)
-    UNITY_DEFINE_INSTANCED_PROP(float, _Roughness)
-UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
-
-struct Attributes {
+struct Attributes
+{
     float3 positionOS : POSITION;
 	float3 normalOS : NORMAL;
     float2 baseUV : TEXCOORD0;
+    float2 detailUV : TEXCOORD1;
+
+    GI_ATTRIBUTE_DATA
     UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
-struct Varyings {
+struct Varyings
+{
     float4 positionCS : SV_POSITION;
 	float3 positionWS : VAR_POSITION;
 	float3 normalWS : VAR_NORMAL;
     float2 baseUV : VAR_BASE_UV;
+    float2 detailUV : VAR_DETAIL_UV;
+
+    GI_VARYINGS_DATA
     UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
@@ -37,12 +36,13 @@ Varyings LitVert (Attributes i)
     Varyings o;
     UNITY_SETUP_INSTANCE_ID(i);
     UNITY_TRANSFER_INSTANCE_ID(i, output);
+    TRANSFER_GI_DATA(i, o);
     
     o.positionWS = TransformObjectToWorld(i.positionOS.xyz);
     o.positionCS = TransformWorldToHClip(o.positionWS);
     
-    float4 baseST = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseMap_ST);
-    o.baseUV = i.baseUV * baseST.xy + baseST.zw;
+    o.baseUV = TransformBaseUV(i.baseUV);
+    o.detailUV = TransformDetailUV(i.detailUV);
     
     o.normalWS = TransformObjectToWorldNormal(i.normalOS);
     
@@ -52,28 +52,35 @@ Varyings LitVert (Attributes i)
 float4 LitFrag (Varyings i) : SV_TARGET 
 {
     UNITY_SETUP_INSTANCE_ID(input);
-    float4 baseMap = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.baseUV);
-    float4 baseColor = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseColor);
-    
-    float4 base = baseMap * baseColor;
+    ClipLod(i.positionCS.xy, unity_LODFade.x);
+
+    float4 base = GetBase(i.baseUV, i.detailUV);
     #if defined(_CLIPPING)
-    clip(base.a - UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _Cutoff));
+    clip(base.a - GetCutoff(i.baseUV));
     #endif
 
     Surface surface;
+    surface.position = i.positionWS;
     surface.normal = normalize(i.normalWS);
     surface.viewDirection = normalize(_WorldSpaceCameraPos - i.positionWS);
+    surface.depth = -TransformWorldToView(i.positionWS).z;
     surface.color = base.rgb;
     surface.alpha = base.a;
-    surface.metallic = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _Metallic);
-    surface.roughness = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _Roughness);
+    surface.metallic = GetMetallic(i.baseUV);
+	surface.occlusion = GetOcclusion(i.baseUV);
+    surface.roughness = GetRoughness(i.baseUV, i.detailUV);
+    surface.fresnelStrength = GetFresnel(i.baseUV);
+    surface.dither = InterleavedGradientNoise(i.positionCS.xy, 0);
 
 #if defined(_PREMULTIPLY_ALPHA)
     BRDF brdf = GetBRDF(surface, true);
 #else
     BRDF brdf = GetBRDF(surface);
 #endif
-    float3 color = GetLighting(surface, brdf);
+
+    const GI gi = GetGI(GI_FRAGMENT_DATA(i), surface, brdf);
+    float3 color = GetLighting(surface, brdf, gi);
+    color += GetEmission(i.baseUV);
     return float4(color, surface.alpha);
 }
 

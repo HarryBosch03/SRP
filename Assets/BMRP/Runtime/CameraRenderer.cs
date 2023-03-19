@@ -54,7 +54,6 @@ namespace BMRP.Runtime
 
         private void DrawVisibleGeometry(bool useDynamicBatching, bool useGPUInstancing)
         {
-            return;
             var sortingSettings = new SortingSettings(camera)
             {
                 criteria = SortingCriteria.CommonOpaque
@@ -63,6 +62,13 @@ namespace BMRP.Runtime
             {
                 enableDynamicBatching = useDynamicBatching,
                 enableInstancing = useGPUInstancing,
+                perObjectData = PerObjectData.Lightmaps | 
+                                PerObjectData.ShadowMask | 
+                                PerObjectData.LightProbe | 
+                                PerObjectData.LightProbeProxyVolume | 
+                                PerObjectData.ReflectionProbes | 
+                                PerObjectData.OcclusionProbe | 
+                                PerObjectData.OcclusionProbeProxyVolume,
             };
             drawingSettings.SetShaderPassName(1, LitShaderTagID);
             var filteringSettings = new FilteringSettings(RenderQueueRange.opaque);
