@@ -59,13 +59,13 @@ namespace BMRP.Runtime
                 switch (light.lightType)
                 {
                     case LightType.Spot:
-                        SetupSpotlight(otherLightCount++, ref light);
+                        SetupSpotlight(otherLightCount++, i, ref light);
                         break;
                     case LightType.Directional:
-                        SetupDirectionalLight(directionalLightCount++, ref light);
+                        SetupDirectionalLight(directionalLightCount++, i, ref light);
                         break;
                     case LightType.Point:
-                        SetupPointLight(otherLightCount++, ref light);
+                        SetupPointLight(otherLightCount++, i, ref light);
                         break;
                     case LightType.Area:
                         break;
@@ -90,14 +90,14 @@ namespace BMRP.Runtime
             }
         }
 
-        private void SetupDirectionalLight(int index, ref VisibleLight light)
+        private void SetupDirectionalLight(int index, int visibleIndex, ref VisibleLight light)
         {
             DirLightColors[index] = light.finalColor;
             DirLightDirections[index] = -light.localToWorldMatrix.GetColumn(2);
-            DirLightShadowData[index] = shadows.ReserveDirectionalShadows(light.light, index);
+            DirLightShadowData[index] = shadows.ReserveDirectionalShadows(light.light, visibleIndex);
         }
 
-        private void SetupOtherLight (int index, ref VisibleLight visibleLight)
+        private void SetupOtherLight (int index, int visibleIndex, ref VisibleLight visibleLight)
         {
             OtherLightColors[index] = visibleLight.finalColor;
             
@@ -108,17 +108,17 @@ namespace BMRP.Runtime
             OtherLightSpotAngles[index] = new Vector4(0.0f, 1.0f);
 
             var light = visibleLight.light;
-            OtherLightShadowData[index] = shadows.ReserverOtherShadows(light, index);
+            OtherLightShadowData[index] = shadows.ReserveOtherShadows(light, visibleIndex);
         }
         
-        private void SetupPointLight(int index, ref VisibleLight visibleLight)
+        private void SetupPointLight(int index, int visibleIndex, ref VisibleLight visibleLight)
         {
-            SetupOtherLight(index, ref visibleLight);
+            SetupOtherLight(index, visibleIndex, ref visibleLight);
         }
 
-        private void SetupSpotlight(int index, ref VisibleLight visibleLight)
+        private void SetupSpotlight(int index, int visibleIndex, ref VisibleLight visibleLight)
         {
-            SetupOtherLight(index, ref visibleLight);
+            SetupOtherLight(index, visibleIndex, ref visibleLight);
             OtherLightDirections[index] = -visibleLight.localToWorldMatrix.GetColumn(2);
 
             var light = visibleLight.light;

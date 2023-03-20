@@ -3,6 +3,8 @@
 
 #include "../ShaderLibrary/Common.hlsl"
 
+bool _ShadowPancaking;
+
 struct Attributes
 {
     float3 positionOS : POSITION;
@@ -31,8 +33,16 @@ Varyings ShadowCasterPassVertex (const Attributes i)
     output.positionCS.z = max(output.positionCS.z, output.positionCS.w * UNITY_NEAR_CLIP_VALUE);
 #endif
 
-    float4 baseST = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseMap_ST);
-    o.baseUV = i.baseUV * baseST.xy + baseST.zw;
+    if (_ShadowPancaking)
+    {
+#if UNITY_REVERSED_Z
+        o.positionCS.z = min(o.positionCS.z, o.positionCS.w * UNITY_NEAR_CLIP_VALUE);
+#else
+        o.positionCS.z = max(o.positionCS.z, o.positionCS.w * UNITY_NEAR_CLIP_VALUE);
+#endif
+    }
+    
+    o.baseUV = TransformBaseUV(i.baseUV);
     return o;
 }
 
@@ -41,11 +51,9 @@ void ShadowCasterPassFragment (const Varyings i)
     UNITY_SETUP_INSTANCE_ID(input);
     ClipLod(i.positionCS.xy, unity_LODFade.x);
 
-    const float4 baseMap = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.baseUV);
-    const float4 baseColor = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseColor);
-    float4 base = baseMap * baseColor;
+    float4 base = GetBase(i.baseUV);
 #if defined(_SHADOWS_CLIP)
-    clip(base.a - UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _Cutoff));
+    clip(base.a - GetCutoff(i.baseUV));
 #elif defined(_SHADOWS_DITHER)
     float dither = InterleavedGradientNoise(i.positionCS.xy, 0);
     clip(base.a - dither);

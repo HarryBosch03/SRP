@@ -37,7 +37,7 @@ BRDF GetBRDF (const Surface surface, const bool premultiplyAlpha = false)
 float SpecularStrength (const Surface surface, const BRDF brdf, const Light light)
 {
     const float3 h = SafeNormalize(light.direction + surface.viewDirection);
-    const float nh2 = Square(saturate(dot(surface.normal, h)));
+    const float nh2 = Square(saturate(dot(surface.interpolatedNormal, h)));
     const float lh2 = Square(saturate(dot(light.direction, h)));
     const float r2 = Square(brdf.roughness);
     const float d2 = Square(nh2 * (r2 - 1.0) + 1.00001);
@@ -52,7 +52,7 @@ float3 DirectBRDF (const Surface surface, const BRDF brdf, const Light light)
 
 float3 IndirectBRDF (Surface surface, const BRDF brdf, const float3 diffuse, float3 specular)
 {
-    float fresnelStrength = surface.fresnelStrength * Pow4(1.0 - saturate(dot(surface.normal, surface.viewDirection)));
+    float fresnelStrength = surface.fresnelStrength * Pow4(1.0 - saturate(dot(surface.interpolatedNormal, surface.viewDirection)));
     float3 reflection = specular * lerp(brdf.specular, brdf.fresnel, fresnelStrength);
     
     reflection /= brdf.roughness * brdf.roughness + 1.0f;

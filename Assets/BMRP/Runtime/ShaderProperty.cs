@@ -7,16 +7,16 @@ namespace BMRP.Runtime
 {
     public abstract class ShaderProperty
     {
-        public readonly int PropertyId;
+        public readonly int propertyId;
 
         public ShaderProperty(string name)
         {
-            PropertyId = Shader.PropertyToID(name);
+            propertyId = Shader.PropertyToID(name);
         }
 
         public static CommandBuffer ActiveBuffer { get; set; }
         
-        protected abstract void Send();
+        public abstract void Send();
 
         public static void SendAll(params ShaderProperty[] properties)
         {
@@ -29,7 +29,7 @@ namespace BMRP.Runtime
     
     public abstract class ShaderProperty<T> : ShaderProperty
     {
-        public T Value;
+        public T value;
 
         protected abstract SetOperation Set { get; }
 
@@ -37,18 +37,18 @@ namespace BMRP.Runtime
         
         protected ShaderProperty(string name, T value = default) : base(name)
         {
-            Value = value;
+            this.value = value;
         }
 
         public void Send(T val)
         {
-            Value = val;
+            value = val;
             Send();
         }
         
-        protected override void Send()
+        public override void Send()
         {
-            Set(PropertyId, Value);
+            Set(propertyId, value);
         }
     }
 
@@ -56,8 +56,8 @@ namespace BMRP.Runtime
     {
         public T this[int i]
         {
-            get => Value[i];
-            set => Value[i] = value;
+            get => value[i];
+            set => base.value[i] = value;
         }
         protected ShaderArray(string name, int size) : base(name, new T[size]) { }
     }
@@ -79,7 +79,13 @@ namespace BMRP.Runtime
         public ShaderInt(string name, int value = default) : base(name, value) { }
         protected override SetOperation Set => ActiveBuffer.SetGlobalInt;
     }
-    
+
+    public class ShaderFloat : ShaderProperty<float>
+    {
+        public ShaderFloat(string name, float value = default) : base(name, value) { }
+        protected override SetOperation Set => ActiveBuffer.SetGlobalFloat;
+    }
+
     public class ShaderVector : ShaderProperty<Vector4>
     {
         public ShaderVector(string name, Vector4 value = default) : base(name, value) { }

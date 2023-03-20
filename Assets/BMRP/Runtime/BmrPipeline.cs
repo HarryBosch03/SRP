@@ -12,13 +12,13 @@ namespace BMRP.Runtime
             useGPUInstancing;
         private readonly ShadowSettings shadows;
         
-        public BmrPipeline(bool useDynamicBatching, bool useGPUInstancing, bool useSRPBatcher, ShadowSettings shadows)
+        public BmrPipeline(bool useDynamicBatching, bool useGPUInstancing, bool useSrpBatcher, ShadowSettings shadows)
         {
             this.useDynamicBatching = useDynamicBatching;
             this.useGPUInstancing = useGPUInstancing;
             this.shadows = shadows;
             
-            GraphicsSettings.useScriptableRenderPipelineBatching = useSRPBatcher;
+            GraphicsSettings.useScriptableRenderPipelineBatching = useSrpBatcher;
             GraphicsSettings.lightsUseLinearIntensity = true;
 
             QualitySettings.shadows = ShadowQuality.All;

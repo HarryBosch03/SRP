@@ -19,7 +19,7 @@ namespace BMRP.Runtime
             init(ref intermediate);
         }
         
-        private static Lightmapping.RequestLightsDelegate lightDelegate = (lights, output) =>
+        private static Lightmapping.RequestLightsDelegate _lightDelegate = (lights, output) =>
             {
                 var lightData = new LightDataGI();
                 for (var i = 0; i < lights.Length; i++)
@@ -63,7 +63,7 @@ namespace BMRP.Runtime
 
         partial void InitializeForEditor()
         {
-            Lightmapping.SetDelegate(lightDelegate);
+            Lightmapping.SetDelegate(_lightDelegate);
         }
 
         protected override void Dispose(bool disposing)

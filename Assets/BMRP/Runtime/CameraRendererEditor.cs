@@ -8,7 +8,7 @@ namespace BMRP.Runtime
     public partial class CameraRenderer
     {
 #if UNITY_EDITOR
-        private static ShaderTagId[] legacyShaderTagIds =
+        private static ShaderTagId[] _legacyShaderTagIds =
         {
             new ShaderTagId("Always"),
             new ShaderTagId("ForwardBase"),
@@ -18,22 +18,22 @@ namespace BMRP.Runtime
             new ShaderTagId("VertexLM"),
         };
 
-        private static Material errorMaterial;
+        private static Material _errorMaterial;
         
         string SampleName { get; set; }
 
         partial void DrawUnsupportedShaders()
         {
-            if (!errorMaterial) errorMaterial = new Material(Shader.Find("Hidden/InternalErrorShader"));
+            if (!_errorMaterial) _errorMaterial = new Material(Shader.Find("Hidden/InternalErrorShader"));
 
-            var drawingSettings = new DrawingSettings(legacyShaderTagIds[0], new SortingSettings(camera))
+            var drawingSettings = new DrawingSettings(_legacyShaderTagIds[0], new SortingSettings(camera))
             {
-                overrideMaterial = errorMaterial
+                overrideMaterial = _errorMaterial
             };
 
-            for (var i = 1; i < legacyShaderTagIds.Length; i++)
+            for (var i = 1; i < _legacyShaderTagIds.Length; i++)
             {
-                drawingSettings.SetShaderPassName(i, legacyShaderTagIds[i]);
+                drawingSettings.SetShaderPassName(i, _legacyShaderTagIds[i]);
             }
 
             var filterSettings = FilteringSettings.defaultValue;
