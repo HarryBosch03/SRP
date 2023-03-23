@@ -1,6 +1,8 @@
 #pragma once
 
-float2 Downscale (float2 uv, float2 size, int factor)
+float2 Downscale (float2 uv, float maxV, float4 texelSize)
 {
-    return round(uv * size.xy / factor) / size.xy * factor;
+    float aspect = texelSize.z / texelSize.w;
+    float2 tRes = float2(aspect * maxV, maxV);
+    return floor(uv * tRes) / tRes;
 }

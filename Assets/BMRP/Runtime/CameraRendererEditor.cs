@@ -15,7 +15,7 @@ namespace BMRP.Runtime
 #if UNITY_EDITOR
         string SampleName { get; set; }
 
-        private static readonly ShaderTagId[] legacyShaderTagIds =
+        private static readonly ShaderTagId[] LegacyShaderTagIds =
         {
             new ShaderTagId("Always"),
             new ShaderTagId("ForwardBase"),
@@ -34,14 +34,14 @@ namespace BMRP.Runtime
 
         private partial void DrawUnsupportedShaders()
         {
-            var drawingSettings = new DrawingSettings(legacyShaderTagIds[0], new SortingSettings(camera))
+            var drawingSettings = new DrawingSettings(LegacyShaderTagIds[0], new SortingSettings(camera))
             {
-                overrideMaterial = errorMaterial,
+                overrideMaterial = ErrorMaterial,
             };
 
-            for (var i = 1; i < legacyShaderTagIds.Length; i++)
+            for (var i = 1; i < LegacyShaderTagIds.Length; i++)
             {
-                drawingSettings.SetShaderPassName(i, legacyShaderTagIds[i]);
+                drawingSettings.SetShaderPassName(i, LegacyShaderTagIds[i]);
             }
 
             var filteringSettings = FilteringSettings.defaultValue;

@@ -11,6 +11,8 @@ float3 _DirectionalLightDirections[MaxDirectionalLights];
 int _OtherLightCount;
 float3 _OtherLightColors[MaxOtherLights];
 float3 _OtherLightPositions[MaxOtherLights];
+float4 _OtherLightDirections[MaxOtherLights];
+float4 _OtherLightSpotAngles[MaxOtherLights];
 CBUFFER_END
 
 struct Light
@@ -31,15 +33,29 @@ Light GetDirectionalLight (int index)
     return light;
 }
 
+float remap (float v, float2 from, float2 to)
+{
+    v = (v - from.x) / (from.y - from.x);
+    return v * (to.y - to.x) + to.x;
+}
+
 Light GetOtherLight (int index, Surface surface)
 {
     Light light;
 
     light.color = _OtherLightColors[index];
     float3 ray = _OtherLightPositions[index].xyz - surface.position;
-    float distance = Length2(ray);
+    float distance = max(Length2(ray), 0.0001);
     light.direction = normalize(ray);
-    light.attenuation = 1.0f / distance;
+
+    float4 spotAngles = _OtherLightSpotAngles[index];
+    float4 direction = _OtherLightDirections[index];
+    float spotAttenuation = dot(direction.xyz, light.direction);
+    spotAttenuation = (spotAttenuation - spotAngles.x) / (1.0 - spotAngles.x);
+    spotAttenuation = lerp(1.0, spotAttenuation, direction.w);
+    spotAttenuation = saturate(spotAttenuation);
+    
+    light.attenuation = spotAttenuation / distance;
     
     return light;
 }

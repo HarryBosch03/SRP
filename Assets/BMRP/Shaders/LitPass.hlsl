@@ -17,6 +17,12 @@ DEF_PROP(float, _Wobble)
 
 BUFFER_END
 
+#ifdef _UVDISTORT
+#define AFFINE noperspective
+#else
+#define AFFINE
+#endif
+
 struct Attributes
 {
     float3 pos : POSITION;
@@ -27,32 +33,13 @@ struct Attributes
     UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
-struct TessellationControlPoint
-{
-    float3 pos : INTERNALTESSPOS;
-    float3 normal : NORMAL;
-
-#ifdef _UVDISTORT
-    noperspective
-#endif
-    float2 uv : NORMAL;
-
-    float3 color : NORMAL;
-    float spec : NORMAL;
-    
-    UNITY_VERTEX_INPUT_INSTANCE_ID
-};
-
 struct Varyings
 {
+    AFFINE
     float4 pos : SV_POSITION;
-    float3 normal : VAR_NORMAL;
-
-#ifdef _UVDISTORT
-    noperspective
-#endif
+    AFFINE
     float2 uv : VAR_BASE_UV;
-
+    AFFINE
     float4 color : VAR_COLOR;
 
     UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -71,14 +58,14 @@ Varyings vert (Attributes i)
     float wobble = GET_PROP(_Wobble);
     o.pos.xy = Wobble(o.pos.xy, wobble);
     
-    o.normal = TransformObjectToWorldNormal(i.normal);
+    float3 normal = TransformObjectToWorldNormal(i.normal);
 
     float4 baseST = GET_PROP(_BaseMap_ST);
     o.uv = i.uv * baseST.xy + baseST.zw;
     
     Surface surface;
     surface.position = positionWS;
-    surface.normal = o.normal;
+    surface.normal = normal;
     surface.color = i.color;
     surface.viewDirection = normalize(_WorldSpaceCameraPos - positionWS);
 
@@ -93,8 +80,6 @@ float4 frag (Varyings i) : SV_TARGET
     
     float4 baseMap = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.uv);
     float4 baseColor = baseMap * GET_PROP(_BaseColor) * i.color;
-
-    float3 normal = normalize(i.normal);
 
     #ifdef _CLIPPING
     clip(baseColor.a - GET_PROP(_Cutoff));

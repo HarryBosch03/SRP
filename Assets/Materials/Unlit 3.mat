@@ -82,7 +82,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _Value: 2
+    - _Value: 3
     - _Wobble: 1
     - _ZWrite: 1
     m_Colors:

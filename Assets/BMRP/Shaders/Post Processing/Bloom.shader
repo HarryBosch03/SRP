@@ -3,7 +3,7 @@ Shader "BMRP/Post Process/Bloom"
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
-		_Fac ("Downscale Factor", int) = 2
+		_MaxV ("Max Vertical Resolution", int) = 2
 		_Threshold ("Threshold", float) = 1.1
 		_Strength ("Strength", float) = 2.0
 	}
@@ -42,7 +42,7 @@ Shader "BMRP/Post Process/Bloom"
 			
 			sampler2D _MainTex;
 			float4 _MainTex_TexelSize;
-			int _Fac;
+			int _MaxV;
 			float _Threshold;
 			float _Strength;
 
@@ -67,8 +67,11 @@ Shader "BMRP/Post Process/Bloom"
 						int x = j - BlurSamples / 2;
 						int y = k - BlurSamples / 2;
 
-						float2 offset = float2(x, y) * _MainTex_TexelSize.xy * _Fac;
-						float2 uv = Downscale(i.uv + offset, _MainTex_TexelSize.zw, _Fac);
+						float aspect = _MainTex_TexelSize.z / _MainTex_TexelSize.w;
+						float2 res = float2(aspect * _MaxV, _MaxV);
+						
+						float2 offset = float2(x, y) / res;
+						float2 uv = Downscale(i.uv + offset, _MaxV, _MainTex_TexelSize);
 						float3 col = tex2D(_MainTex, uv) * Falloff(float2(x, y));
 						sample += max(col - _Threshold, 0.0) * _Strength;
 					}

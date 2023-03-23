@@ -22,12 +22,14 @@
 
 #define GET_PROP(n) UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, n)
 
-#define WOBBLE_AMOUNT 12.0;
+float _WobbleAmount = 6.0;
 
 float2 Wobble (float2 pos, float amount)
 {
 #ifdef _WOBBLE
-    amount *= WOBBLE_AMOUNT;
+    if (_WobbleAmount == 0.0) return pos;
+    
+    amount *= _WobbleAmount;
     return round(pos * screenSize.xy * 0.5f / amount) * screenSize.zw * 2.0f * amount;
 #else
     return pos;

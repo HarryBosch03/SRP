@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 
 namespace BMRP.Runtime
 {
@@ -16,17 +17,21 @@ namespace BMRP.Runtime
         private ScriptableRenderContext context;
         private Camera camera;
         private Lighting lighting;
-        private PostFXStack postFXStack = new PostFXStack();
+        private readonly PostFXStack postFXStack = new PostFXStack();
         private CameraSettings settings;
 
-        private static readonly Material errorMaterial = new Material(Shader.Find("Hidden/InternalErrorShader"));
+        private static readonly Material ErrorMaterial = new Material(Shader.Find("Hidden/InternalErrorShader"));
         
         private static readonly ShaderTagId 
-            unlitShaderTagId = new("SRPDefaultUnlit"),
-            litShaderTagId = new ShaderTagId("BMLit");
+            UnlitShaderTagId = new("SRPDefaultUnlit"),
+            LitShaderTagId = new ShaderTagId("BMLit");
 
-        private static readonly int screenSize = Shader.PropertyToID("screenSize");
+        private static readonly ShaderProperty<Vector4> 
+            ScreenSize = ShaderPropertyFactory.Vec("screenSize");
 
+        private static readonly ShaderProperty<float>
+            WobbleAmount = ShaderPropertyFactory.Float("_WobbleAmount");
+        
         public void Render(ScriptableRenderContext context, Camera camera, CameraSettings settings)
         {
             this.context = context;
@@ -72,7 +77,10 @@ namespace BMRP.Runtime
 
         private void SetGlobals()
         {
-            Shader.SetGlobalVector(screenSize, new Vector4(Screen.width, Screen.height, 1.0f / Screen.width, 1.0f / Screen.height));
+            ScreenSize.Value = new Vector4(Screen.width, Screen.height, 1.0f / Screen.width, 1.0f / Screen.height);
+            WobbleAmount.Value = settings.globalVertexWobbleAmount;
+
+            ShaderProperty.SendAll(buffer, ScreenSize, WobbleAmount);
         }
 
         private bool Cull()
@@ -89,13 +97,13 @@ namespace BMRP.Runtime
             {
                 criteria = SortingCriteria.CommonOpaque,
             };
-            var drawingSettings = new DrawingSettings(unlitShaderTagId, sortingSettings)
+            var drawingSettings = new DrawingSettings(UnlitShaderTagId, sortingSettings)
             {
                 enableDynamicBatching = useDynamicBatching,
                 enableInstancing = useGPUInstancing,
                 perObjectData = PerObjectData.LightProbe
             };
-            drawingSettings.SetShaderPassName(1, litShaderTagId);
+            drawingSettings.SetShaderPassName(1, LitShaderTagId);
             
             var filterSettings = new FilteringSettings(RenderQueueRange.opaque);
             
@@ -133,6 +141,8 @@ namespace BMRP.Runtime
             [SerializeField] 
             public bool useDynamicBatching = true, useGPUInstancing = true, useSrpBatching = true;
 
+            [SerializeField] public float globalVertexWobbleAmount = 6.0f;
+            
             [Space] [SerializeField] public PostFXSettings postFXSettings;
         }
     }
