@@ -9,21 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3bb1e26a54047d4c8fec1e748d7ad14, type: 3}
-  m_Name: BMR Pipeline Asset
+  m_Script: {fileID: 11500000, guid: c29f7f103e0e4494f85b231bbdba0e75, type: 3}
+  m_Name: Bmr Pipeline Asset
   m_EditorClassIdentifier: 
-  useDynamicBatching: 1
-  useGPUInstancing: 1
-  useSRPBatcher: 1
-  shadows:
-    maxDistance: 100
-    distanceFade: 0.1
-    directional:
-      atlasSize: 2048
-      filter: 2
-      cascadeBlend: 2
-      cascadeCount: 4
-      cascade1: 0.1
-      cascade2: 0.2
-      cascade3: 0.5
-      cascadeFade: 0.1
+  settings:
+    useDynamicBatching: 1
+    useGPUInstancing: 1
+    useSrpBatching: 1
+    postFXSettings: {fileID: 11400000, guid: 3190c1e02ba1bdb48bdd8dee2975a089, type: 2}

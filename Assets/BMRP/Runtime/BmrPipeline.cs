@@ -3,34 +3,23 @@ using UnityEngine.Rendering;
 
 namespace BMRP.Runtime
 {
-    public partial class BmrPipeline : RenderPipeline
+    public class BmrPipeline : RenderPipeline
     {
-        private readonly CameraRenderer renderer = new CameraRenderer();
+        private readonly CameraRenderer renderer = new();
 
-        private readonly bool 
-            useDynamicBatching, 
-            useGPUInstancing;
-        private readonly ShadowSettings shadows;
+        private CameraRenderer.CameraSettings settings;
         
-        public BmrPipeline(bool useDynamicBatching, bool useGPUInstancing, bool useSrpBatcher, ShadowSettings shadows)
+        public BmrPipeline(CameraRenderer.CameraSettings settings)
         {
-            this.useDynamicBatching = useDynamicBatching;
-            this.useGPUInstancing = useGPUInstancing;
-            this.shadows = shadows;
-            
-            GraphicsSettings.useScriptableRenderPipelineBatching = useSrpBatcher;
-            GraphicsSettings.lightsUseLinearIntensity = true;
-
-            QualitySettings.shadows = ShadowQuality.All;
-            
-            InitializeForEditor();
+            this.settings = settings;
+            GraphicsSettings.useScriptableRenderPipelineBatching = settings.useSrpBatching;
         }
-        
+
         protected override void Render(ScriptableRenderContext context, Camera[] cameras)
         {
             foreach (var camera in cameras)
             {
-                renderer.Render(context, camera, useDynamicBatching, useGPUInstancing, shadows);
+                renderer.Render(context, camera, settings);
             }
         }
     }

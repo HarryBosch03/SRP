@@ -1,5 +1,4 @@
 using System;
-using UnityEditor.Graphs;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -8,40 +7,37 @@ namespace BMRP.Runtime
     public class Lighting
     {
         private const string BufferName = "Lighting";
+        private const int MaxDirectionalLights = 4, MaxOtherLights = 64;
 
-        private readonly CommandBuffer buffer = new()
+        private readonly ShaderProperty<int>
+            dirLightCount = ShaderPropertyFactory.Int("_DirectionalLightCount"),
+            otherLightCount = ShaderPropertyFactory.Int("_OtherLightCount");
+
+        private readonly ShaderProperty<Vector4[]>
+            dirLightColors = ShaderPropertyFactory.VecArray("_DirectionalLightColors", MaxDirectionalLights),
+            dirLightDirections = ShaderPropertyFactory.VecArray("_DirectionalLightDirections", MaxDirectionalLights),
+
+            otherLightColors = ShaderPropertyFactory.VecArray("_OtherLightColors", MaxOtherLights),
+            otherLightPositions = ShaderPropertyFactory.VecArray("_OtherLightPositions", MaxOtherLights);
+
+        private readonly CommandBuffer buffer = new CommandBuffer()
         {
-            name = BufferName
+            name = BufferName,
         };
-
-        private const int MaxDirLightCount = 4, MaxOtherLightCount = 64;
-
-        private static readonly ShaderInt
-            DirLightCount = new("_DirectionalLightCount", MaxDirLightCount),
-            OtherLightCount = new("_OtherLightCount", MaxOtherLightCount);
-        
-        private static readonly ShaderVectorArray
-            DirLightColors = new("_DirectionalLightColors", MaxDirLightCount),
-            DirLightDirections = new("_DirectionalLightDirections", MaxDirLightCount),
-            DirLightShadowData = new("_DirectionalLightShadowData", MaxDirLightCount),
-            
-            OtherLightColors = new("_OtherLightColors", MaxOtherLightCount),
-            OtherLightPositions = new("_OtherLightPositions", MaxOtherLightCount),
-            OtherLightDirections = new("_OtherLightDirections", MaxOtherLightCount),
-            OtherLightSpotAngles = new("_OtherLightSpotAngles", MaxOtherLightCount),
-            OtherLightShadowData = new("_OtherLightShadowData", MaxOtherLightCount);
 
         private CullingResults cullingResults;
 
-        private readonly Shadows shadows = new();
-        
-        public void Setup(ScriptableRenderContext context, CullingResults cullingResults, ShadowSettings shadowSettings)
+        public void Setup(ScriptableRenderContext context, CullingResults cullingResults)
         {
             this.cullingResults = cullingResults;
+
+            dirLightCount.Value = 0;
+            otherLightCount.Value = 0;
+            
             buffer.BeginSample(BufferName);
-            shadows.Setup(context, cullingResults, shadowSettings);
+            
             SetupLights();
-            shadows.Render();
+            
             buffer.EndSample(BufferName);
             context.ExecuteCommandBuffer(buffer);
             buffer.Clear();
@@ -49,94 +45,53 @@ namespace BMRP.Runtime
 
         private void SetupLights()
         {
-            var visibleLights = cullingResults.visibleLights;
-
-            int directionalLightCount = 0, otherLightCount = 0;
-
-            for (var i = 0; i < visibleLights.Length; i++)
+            foreach (var light in cullingResults.visibleLights)
             {
-                var light = visibleLights[i];
                 switch (light.lightType)
                 {
                     case LightType.Spot:
-                        SetupSpotlight(otherLightCount++, i, ref light);
                         break;
                     case LightType.Directional:
-                        SetupDirectionalLight(directionalLightCount++, i, ref light);
+                        SetupDirectionalLight(light);
                         break;
                     case LightType.Point:
-                        SetupPointLight(otherLightCount++, i, ref light);
+                        SetupPointLight(light);
                         break;
                     case LightType.Area:
                         break;
                     case LightType.Disc:
-                        break;
+                        throw new Exception("What the Fuck is a Disc Light");
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
 
-            ShaderProperty.ActiveBuffer = buffer;
-            DirLightCount.Send(directionalLightCount);
-            if (directionalLightCount > 0)
-            {
-                ShaderProperty.SendAll(DirLightColors, DirLightDirections, DirLightShadowData);
-            }
+            ShaderProperty.SendAll(buffer, dirLightCount, dirLightColors, dirLightDirections, otherLightCount, otherLightColors, otherLightPositions);
+        }
+
+        private void SetupDirectionalLight(VisibleLight light)
+        {
+            if (dirLightCount.Value >= MaxDirectionalLights) return;
             
-            OtherLightCount.Send(otherLightCount);
-            if (otherLightCount > 0)
-            {
-                ShaderProperty.SendAll(OtherLightColors, OtherLightPositions, OtherLightDirections, OtherLightSpotAngles, OtherLightShadowData);
-            }
-        }
-
-        private void SetupDirectionalLight(int index, int visibleIndex, ref VisibleLight light)
-        {
-            DirLightColors[index] = light.finalColor;
-            DirLightDirections[index] = -light.localToWorldMatrix.GetColumn(2);
-            DirLightShadowData[index] = shadows.ReserveDirectionalShadows(light.light, visibleIndex);
-        }
-
-        private void SetupOtherLight (int index, int visibleIndex, ref VisibleLight visibleLight)
-        {
-            OtherLightColors[index] = visibleLight.finalColor;
+            dirLightColors.Value[dirLightCount.Value] = light.finalColor;
+            dirLightDirections.Value[dirLightCount.Value] = light.localToWorldMatrix.GetColumn(2);
             
-            var position = visibleLight.localToWorldMatrix.GetColumn(3);
-            position.w = 1.0f / Mathf.Max(visibleLight.range * visibleLight.range, 0.00001f);
-            OtherLightPositions[index] = position;
-
-            OtherLightSpotAngles[index] = new Vector4(0.0f, 1.0f);
-
-            var light = visibleLight.light;
-            OtherLightShadowData[index] = shadows.ReserveOtherShadows(light, visibleIndex);
+            dirLightCount.Value++;
         }
-        
-        private void SetupPointLight(int index, int visibleIndex, ref VisibleLight visibleLight)
+
+        private void SetupOtherLight(VisibleLight light)
         {
-            SetupOtherLight(index, visibleIndex, ref visibleLight);
+            if (otherLightCount.Value >= MaxOtherLights) return;
+            
+            otherLightColors.Value[otherLightCount.Value] = light.finalColor;
+            otherLightPositions.Value[otherLightCount.Value] = light.localToWorldMatrix.GetColumn(3);
+
+            otherLightCount.Value++;
         }
 
-        private void SetupSpotlight(int index, int visibleIndex, ref VisibleLight visibleLight)
+        private void SetupPointLight(VisibleLight light)
         {
-            SetupOtherLight(index, visibleIndex, ref visibleLight);
-            OtherLightDirections[index] = -visibleLight.localToWorldMatrix.GetColumn(2);
-
-            var light = visibleLight.light;
-            var innerCos = Mathf.Cos(Mathf.Deg2Rad * 0.5f * light.innerSpotAngle);
-            var outerCos = Mathf.Cos(Mathf.Deg2Rad * 0.5f * light.spotAngle);
-            var angleRangeInv = 1.0f / Mathf.Max(innerCos - outerCos, 0.001f);
-            OtherLightSpotAngles[index] = new Vector4
-            {
-                x = angleRangeInv,
-                y = -outerCos * angleRangeInv,
-            };
+            SetupOtherLight(light);
         }
-        
-        public void Cleanup()
-        {
-            shadows.Cleanup();
-        }
-
-        private delegate void LightSetup(int index, ref VisibleLight light);
     }
 }

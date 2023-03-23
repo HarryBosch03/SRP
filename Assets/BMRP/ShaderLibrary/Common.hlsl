@@ -1,60 +1,40 @@
-#ifndef CUSTOM_COMMON_INCLUDED
-#define CUSTOM_COMMON_INCLUDED
-
-#if defined(_SHADOW_MASK_ALWAYS) || defined(_SHADOW_MASK_DISTANCE)
-    #define SHADOWS_SHADOWMASK
-#endif
+#pragma once
 
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Packing.hlsl"
 #include "UnityInput.hlsl"
 
 #define UNITY_MATRIX_M unity_ObjectToWorld
 #define UNITY_MATRIX_I_M unity_WorldToObject
-#define UNITY_PREV_MATRIX_M unity_PrevWorldToObject
-#define UNITY_PREV_MATRIX_I_M unity_PrevWorldToObject
 #define UNITY_MATRIX_V unity_MatrixV
 #define UNITY_MATRIX_VP unity_MatrixVP
 #define UNITY_MATRIX_P glstate_matrix_projection
 
-#define UNITY_MATRIX_P glstate_matrix_projection
+#define UNITY_PREV_MATRIX_M unity_PrevObjectToWorld
+#define UNITY_PREV_MATRIX_I_M unity_PrevWorldToObject
 
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/UnityInstancing.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/SpaceTransforms.hlsl"
 
-float Square(const float v)
+#define DEF_PROP(t, n) UNITY_DEFINE_INSTANCED_PROP(t, n)
+#define BUFFER_START UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
+#define BUFFER_END UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
+
+#define GET_PROP(n) UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, n)
+
+#define WOBBLE_AMOUNT 12.0;
+
+float2 Wobble (float2 pos, float amount)
+{
+#ifdef _WOBBLE
+    amount *= WOBBLE_AMOUNT;
+    return round(pos * screenSize.xy * 0.5f / amount) * screenSize.zw * 2.0f * amount;
+#else
+    return pos;
+#endif
+}
+
+float Square(float v)
 {
     return v * v;
 }
-
-float DistanceSquared(const float3 pA, const float3 pB)
-{
-    return dot(pA - pB, pA - pB);
-}
-
-void ClipLod (float2 positionCS, float fade)
-{
-#if defined(LOD_FADE_CROSSFADE)
-    float dither = InterleavedGradientNoise(positionCS.xy, 0);
-    clip(fade + (fade < 0.0 ? dither : -dither));
-#endif
-}
-
-float3 DecodeNormal (float4 sample, float scale)
-{
-#if defined(UNITY_NO_DXT5nm)
-    return UnpackNormalRGB(sample, scale);
-#else
-    return UnpackNormalmapRGorAG(sample, scale);
-#endif
-}
-
-float3 NormalTangentToWorld (const float3 normalTS, const float3 normalWS, const float4 tangentWS)
-{
-    const float3x3 tangentToWorld =
-        CreateTangentToWorld(normalWS, tangentWS.xyz, 0.0);
-    return TransformTangentToWorld(normalTS, tangentToWorld);
-}
-
-#endif

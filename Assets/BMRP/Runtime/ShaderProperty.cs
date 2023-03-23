@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEditor;
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -7,88 +6,69 @@ namespace BMRP.Runtime
 {
     public abstract class ShaderProperty
     {
-        public readonly int propertyId;
+        public static CommandBuffer ActiveBuffer { get; private set; }
 
-        public ShaderProperty(string name)
+        public static void SendAll(CommandBuffer buffer, params ShaderProperty[] properties)
         {
-            propertyId = Shader.PropertyToID(name);
-        }
-
-        public static CommandBuffer ActiveBuffer { get; set; }
-        
-        public abstract void Send();
-
-        public static void SendAll(params ShaderProperty[] properties)
-        {
+            using var c = new BufferContext(buffer);
             foreach (var property in properties)
             {
                 property.Send();
             }
         }
-    }
-    
-    public abstract class ShaderProperty<T> : ShaderProperty
-    {
-        public T value;
 
-        protected abstract SetOperation Set { get; }
+        public abstract void Send();
 
-        protected delegate void SetOperation(int id, T val);
-        
-        protected ShaderProperty(string name, T value = default) : base(name)
+        public class BufferContext : IDisposable
         {
-            this.value = value;
+            public BufferContext(CommandBuffer buffer)
+            {
+                ActiveBuffer = buffer;
+            }
+            
+            public void Dispose()
+            {
+                ActiveBuffer = null;
+            }
+        }
+    }
+
+    public class ShaderProperty<T> : ShaderProperty
+    {
+        public readonly int handle;
+        
+        private readonly Action<CommandBuffer, ShaderProperty<T>> setCallback;
+        public T Value { get; set; }
+        public T ActualValue { get; private set; }
+
+        public ShaderProperty(string reference, Action<CommandBuffer, ShaderProperty<T>> setCallback)
+        {
+            handle = Shader.PropertyToID(reference);
+            this.setCallback = setCallback;
         }
 
-        public void Send(T val)
+        public void Set(T value)
         {
-            value = val;
+            Value = value;
             Send();
         }
         
         public override void Send()
         {
-            Set(propertyId, value);
+            setCallback(ActiveBuffer, this);
+            ActualValue = Value;
         }
     }
 
-    public abstract class ShaderArray<T> : ShaderProperty<T[]>
+    public static class ShaderPropertyFactory
     {
-        public T this[int i]
+        public static ShaderProperty<int> Int(string reference) => new(reference, (b, p) => b.SetGlobalInt(p.handle, p.Value));
+        public static ShaderProperty<Vector4> Vec(string reference) => new(reference, (b, p) => b.SetGlobalVector(p.handle, p.Value));
+        public static ShaderProperty<Vector4[]> VecArray(string reference, int capacity)
         {
-            get => value[i];
-            set => base.value[i] = value;
+            var b = new ShaderProperty<Vector4[]>(reference, (b, p) => b.SetGlobalVectorArray(p.handle, p.Value));
+            b.Value = new Vector4[capacity];
+            return b;
         }
-        protected ShaderArray(string name, int size) : base(name, new T[size]) { }
-    }
-
-    public class ShaderVectorArray : ShaderArray<Vector4>
-    {
-        public ShaderVectorArray(string name, int size) : base(name, size) { }
-        protected override SetOperation Set => ActiveBuffer.SetGlobalVectorArray;
-    }
-
-    public class ShaderMatrixArray : ShaderArray<Matrix4x4>
-    {
-        public ShaderMatrixArray(string name, int size) : base(name, size) { }
-        protected override SetOperation Set => ActiveBuffer.SetGlobalMatrixArray;
-    }
-
-    public class ShaderInt : ShaderProperty<int>
-    {
-        public ShaderInt(string name, int value = default) : base(name, value) { }
-        protected override SetOperation Set => ActiveBuffer.SetGlobalInt;
-    }
-
-    public class ShaderFloat : ShaderProperty<float>
-    {
-        public ShaderFloat(string name, float value = default) : base(name, value) { }
-        protected override SetOperation Set => ActiveBuffer.SetGlobalFloat;
-    }
-
-    public class ShaderVector : ShaderProperty<Vector4>
-    {
-        public ShaderVector(string name, Vector4 value = default) : base(name, value) { }
-        protected override SetOperation Set => ActiveBuffer.SetGlobalVector;
     }
 }

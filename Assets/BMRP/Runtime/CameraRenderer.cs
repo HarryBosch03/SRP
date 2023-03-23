@@ -9,86 +9,111 @@ namespace BMRP.Runtime
 
         private readonly CommandBuffer buffer = new()
         {
-            name = BufferName
+            name = BufferName,
         };
 
-        private static readonly ShaderTagId UnlitShaderTagID = new("SRPDefaultUnlit");
-        private static readonly ShaderTagId LitShaderTagID = new("BMLit");
-
+        private CullingResults cullingResults;
         private ScriptableRenderContext context;
         private Camera camera;
-        private CullingResults cullingResults;
+        private Lighting lighting;
+        private PostFXStack postFXStack = new PostFXStack();
+        private CameraSettings settings;
 
-        private readonly Lighting lighting = new();
+        private static readonly Material errorMaterial = new Material(Shader.Find("Hidden/InternalErrorShader"));
+        
+        private static readonly ShaderTagId 
+            unlitShaderTagId = new("SRPDefaultUnlit"),
+            litShaderTagId = new ShaderTagId("BMLit");
 
-        public void Render(ScriptableRenderContext context, Camera camera, bool useDynamicBatching, bool useGPUInstancing, ShadowSettings shadows)
+        private static readonly int screenSize = Shader.PropertyToID("screenSize");
+
+        public void Render(ScriptableRenderContext context, Camera camera, CameraSettings settings)
         {
             this.context = context;
             this.camera = camera;
-            
+            this.settings = settings;
+
             PrepareBuffer();
             PrepareForSceneWindow();
-            if (!Cull(shadows.maxDistance)) return;
-            
-            buffer.BeginSample(SampleName);
-            ExecuteBuffer();
-            lighting.Setup(context, cullingResults, shadows);
-            buffer.EndSample(SampleName);
+            if (Cull()) return;
             
             Setup();
-            DrawVisibleGeometry(useDynamicBatching, useGPUInstancing);
+
+            lighting = new Lighting();
+            lighting.Setup(context, cullingResults);
+            DrawVisibleGeometry(settings.useDynamicBatching, settings.useGPUInstancing);
             DrawUnsupportedShaders();
-            DrawGizmos();
-            lighting.Cleanup();
+            
+            DrawGizmosBeforeFX();
+            postFXStack.Render();
+            DrawGizmosAfterFX();
+            
+            Cleanup();
+            
             Submit();
         }
 
         private void Setup()
         {
             context.SetupCameraProperties(camera);
-            var flags = camera.clearFlags;
-            buffer.ClearRenderTarget(flags <= CameraClearFlags.Depth, flags == CameraClearFlags.Color, flags == CameraClearFlags.Color ? camera.backgroundColor.linear : Color.clear);
-            buffer.BeginSample(SampleName);
+            var clearFlags = camera.clearFlags;
+            
+            postFXStack.Setup(context, camera, settings.postFXSettings, buffer, ref clearFlags);
+            
+            buffer.ClearRenderTarget(
+                clearFlags <= CameraClearFlags.Depth, 
+                clearFlags == CameraClearFlags.Color, 
+                clearFlags == CameraClearFlags.Color ? camera.backgroundColor.linear : Color.clear);
+            buffer.BeginSample(BufferName);
             ExecuteBuffer();
+
+            SetGlobals();
         }
 
+        private void SetGlobals()
+        {
+            Shader.SetGlobalVector(screenSize, new Vector4(Screen.width, Screen.height, 1.0f / Screen.width, 1.0f / Screen.height));
+        }
+
+        private bool Cull()
+        {
+            if (!camera.TryGetCullingParameters(out var p)) return true;
+            
+            cullingResults = context.Cull(ref p);
+            return false;
+        }
+        
         private void DrawVisibleGeometry(bool useDynamicBatching, bool useGPUInstancing)
         {
             var sortingSettings = new SortingSettings(camera)
             {
-                criteria = SortingCriteria.CommonOpaque
+                criteria = SortingCriteria.CommonOpaque,
             };
-            var drawingSettings = new DrawingSettings(UnlitShaderTagID, sortingSettings)
+            var drawingSettings = new DrawingSettings(unlitShaderTagId, sortingSettings)
             {
                 enableDynamicBatching = useDynamicBatching,
                 enableInstancing = useGPUInstancing,
-                perObjectData = PerObjectData.Lightmaps | 
-                                PerObjectData.ShadowMask | 
-                                PerObjectData.LightProbe | 
-                                PerObjectData.LightProbeProxyVolume | 
-                                PerObjectData.ReflectionProbes | 
-                                PerObjectData.OcclusionProbe | 
-                                PerObjectData.OcclusionProbeProxyVolume,
+                perObjectData = PerObjectData.LightProbe
             };
-            drawingSettings.SetShaderPassName(1, LitShaderTagID);
-            var filteringSettings = new FilteringSettings(RenderQueueRange.opaque);
-
-            context.DrawRenderers(cullingResults, ref drawingSettings, ref filteringSettings);
-
+            drawingSettings.SetShaderPassName(1, litShaderTagId);
+            
+            var filterSettings = new FilteringSettings(RenderQueueRange.opaque);
+            
+            context.DrawRenderers(cullingResults, ref drawingSettings, ref filterSettings);
+            
             context.DrawSkybox(camera);
 
             sortingSettings.criteria = SortingCriteria.CommonTransparent;
             drawingSettings.sortingSettings = sortingSettings;
-            filteringSettings.renderQueueRange = RenderQueueRange.transparent;
-
-            context.DrawRenderers(cullingResults, ref drawingSettings, ref filteringSettings);
+            filterSettings.renderQueueRange = RenderQueueRange.transparent;
+            context.DrawRenderers(cullingResults, ref drawingSettings, ref filterSettings);
         }
 
         private void Submit()
         {
             buffer.EndSample(SampleName);
             ExecuteBuffer();
-            context.Submit();
+            context.Submit();   
         }
 
         private void ExecuteBuffer()
@@ -96,14 +121,19 @@ namespace BMRP.Runtime
             context.ExecuteCommandBuffer(buffer);
             buffer.Clear();
         }
-
-        private bool Cull(float maxShadowDistance)
+        
+        private void Cleanup()
         {
-            if (!camera.TryGetCullingParameters(out var p)) return false;
+            postFXStack.Cleanup();
+        }
+        
+        [System.Serializable]
+        public class CameraSettings
+        {
+            [SerializeField] 
+            public bool useDynamicBatching = true, useGPUInstancing = true, useSrpBatching = true;
 
-            p.shadowDistance = Mathf.Min(maxShadowDistance, camera.farClipPlane);
-            cullingResults = context.Cull(ref p);
-            return true;
+            [Space] [SerializeField] public PostFXSettings postFXSettings;
         }
     }
 }
