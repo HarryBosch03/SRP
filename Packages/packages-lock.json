@@ -165,6 +165,12 @@
       },
       "url": "https://packages.unity.com"
     },
+    "net.boschingmachine.bmrp": {
+      "version": "file:net.boschingmachine.bmrp",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,

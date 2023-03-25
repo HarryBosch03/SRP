@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fb8268f049747d2b1fbd233f409442d, type: 3}
+  m_Script: {fileID: 11500000, guid: c784f70d318bcce45a34fd1a307629b5, type: 3}
   m_Name: Post FX Settings
   m_EditorClassIdentifier: 
+  downscale: 3
   effects:
-  - {fileID: 2100000, guid: 9dbabe35cb7342643a693b04dda4e86f, type: 2}
-  - {fileID: 2100000, guid: 85f6d043e3133f84dbec43ae41ba1ec6, type: 2}
-  - {fileID: 2100000, guid: 6ddbf8d2b56337644af7b016e042cd7a, type: 2}
-  - {fileID: 2100000, guid: c11b6a0fe3bac1b4d99e61fd4521fb81, type: 2}
+  - {fileID: 2100000, guid: 16cfa14752da0724c84ac5b9b38391be, type: 2}
+  - {fileID: 2100000, guid: c050e079803a30347a60434d6f2364d9, type: 2}
+  - {fileID: 2100000, guid: d058466601edb0c408472c3cfad9384d, type: 2}

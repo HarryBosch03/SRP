@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c29f7f103e0e4494f85b231bbdba0e75, type: 3}
+  m_Script: {fileID: 11500000, guid: e136f2acf4b9fba47ba9735e909de6a2, type: 3}
   m_Name: BMR Pipeline Asset
   m_EditorClassIdentifier: 
   settings:

@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Unlit 2
-  m_Shader: {fileID: 4800000, guid: 1e116e128b411924eb30ccf0d76125fd, type: 3}
+  m_Shader: {fileID: 4800000, guid: 965166f407968fa46bd86fce02e20080, type: 3}
   m_ValidKeywords:
   - _UVDISTORT
   - _WOBBLE

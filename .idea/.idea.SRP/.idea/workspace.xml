@@ -2,25 +2,83 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="01ff930d-949d-4f33-bf55-d1a3b065cf91" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Materials/Post Process/Bloom.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BMRP/Materials/Post Process/Bloom.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Materials/Post Process/Downscale.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BMRP/Materials/Post Process/Downscale.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/CameraRenderer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BMRP/Runtime/CameraRenderer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/CameraRendererEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BMRP/Runtime/CameraRendererEditor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/Lighting.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BMRP/Runtime/Lighting.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/ShaderProperty.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BMRP/Runtime/ShaderProperty.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BMRP/ShaderLibrary/Common.hlsl" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BMRP/ShaderLibrary/Common.hlsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BMRP/ShaderLibrary/Light.hlsl" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BMRP/ShaderLibrary/Light.hlsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/LitPass.hlsl" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BMRP/Shaders/LitPass.hlsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/Bloom.shader" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/Bloom.shader" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/Common.hlsl" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/Common.hlsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/Downscale.shader" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/Downscale.shader" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SRP/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SRP/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Editor.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Editor/BMRP.Editor.asmdef" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Editor/BMRP.Editor.asmdef.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Materials.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Materials/Post Process.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Materials/Post Process/ACES.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Materials/Post Process/ACES.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Materials/Post Process/Bloom.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Materials/Post Process/Bloom.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Materials/Post Process/CRT.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Materials/Post Process/CRT.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Materials/Post Process/Downscale.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Materials/Post Process/Downscale.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/BMRP.Runtime.asmdef" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/BMRP.Runtime.asmdef.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/BmrPipeline.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/BmrPipeline.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/BmrPipelineAsset.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/BmrPipelineAsset.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/CameraRenderer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/CameraRenderer.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/CameraRendererEditor.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/CameraRendererEditor.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/Lighting.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/Lighting.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/PostFXSettings.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/PostFXSettings.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/PostFXStack.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/PostFXStack.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/PostFXStackEditor.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/PostFXStackEditor.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/ShaderProperty.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Runtime/ShaderProperty.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/ShaderLibrary.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/ShaderLibrary/Common.hlsl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/ShaderLibrary/Common.hlsl.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/ShaderLibrary/Light.hlsl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/ShaderLibrary/Light.hlsl.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/ShaderLibrary/Lighting.hlsl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/ShaderLibrary/Lighting.hlsl.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/ShaderLibrary/Surface.hlsl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/ShaderLibrary/Surface.hlsl.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/ShaderLibrary/UnityInput.hlsl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/ShaderLibrary/UnityInput.hlsl.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Lit.shader" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Lit.shader.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/LitPass.hlsl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/LitPass.hlsl.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/ACES.shader" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/ACES.shader.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/Bloom.shader" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/Bloom.shader.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/CRT.shader" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/CRT.shader.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/Common.hlsl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/Common.hlsl.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/Downscale.shader" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Post Processing/Downscale.shader.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Unlit.shader" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/Unlit.shader.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/UnlitPass.hlsl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BMRP/Shaders/UnlitPass.hlsl.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Materials/Bricks.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Bricks.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/Lit 1.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Lit 1.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/Lit 2.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Lit 2.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/Transparent.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Transparent.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/Unlit 1.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Unlit 1.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Materials/Unlit 2.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Unlit 2.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Materials/Unlit 3.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Unlit 3.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Rendering/BMR Pipeline Asset.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Rendering/BMR Pipeline Asset.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Rendering/Post FX Settings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Rendering/Post FX Settings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TimelineSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TimelineSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,24 +102,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Discover.Launch.Via.Unity": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Discover.Launch.Via.Unity&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "rider.external.source.directories": [
-      "C:\\Users\\Harry\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\DecompilerCache",
-      "C:\\Users\\Harry\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\SourcesCache",
-      "C:\\Users\\Harry\\AppData\\Local\\Symbols\\src"
+  &quot;keyToStringList&quot;: {
+    &quot;rider.external.source.directories&quot;: [
+      &quot;C:\\Users\\Harry\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\Harry\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\Harry\\AppData\\Local\\Symbols\\src&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2021.3.13f1\Editor\Unity.exe" />
@@ -110,6 +168,9 @@
       <updated>1679208150479</updated>
       <workItem from="1679208150827" duration="7042000" />
       <workItem from="1679555908983" duration="9157000" />
+      <workItem from="1679570617080" duration="3151000" />
+      <workItem from="1679616126560" duration="14403000" />
+      <workItem from="1679705361622" duration="3133000" />
     </task>
     <servers />
   </component>
