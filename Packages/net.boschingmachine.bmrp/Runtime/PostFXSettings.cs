@@ -11,9 +11,6 @@ namespace BMRP.Runtime
 
         public int Downscale => downscale;
 
-        public List<Material> GetEffects()
-        {
-            return effects;
-        }
+        public List<Material> Effects => effects;
     }
 }

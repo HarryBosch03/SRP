@@ -13,7 +13,4 @@ MonoBehaviour:
   m_Name: Post FX Settings
   m_EditorClassIdentifier: 
   downscale: 3
-  effects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  effects: []
