@@ -16,14 +16,14 @@ namespace BMRP.Runtime
         private ScriptableRenderContext context;
         private Camera camera;
         private Lighting lighting;
-        private readonly PostFXStack postFXStack = new PostFXStack();
+        private readonly PostFXStack postFXStack = new();
         private CameraSettings settings;
 
-        private static readonly Material ErrorMaterial = new Material(Shader.Find("Hidden/InternalErrorShader"));
+        private static readonly Material ErrorMaterial = new(Shader.Find("Hidden/InternalErrorShader"));
         
         private static readonly ShaderTagId 
             UnlitShaderTagId = new("SRPDefaultUnlit"),
-            LitShaderTagId = new ShaderTagId("BMLit");
+            LitShaderTagId = new("BMLit");
 
         private static readonly ShaderProperty<Vector4> 
             ScreenSize = ShaderPropertyFactory.Vec("screenSize");

@@ -22,7 +22,7 @@ namespace BMRP.Runtime
             otherLightDirections = ShaderPropertyFactory.VecArray("_OtherLightDirections", MaxOtherLights),
             otherLightSpotAngles = ShaderPropertyFactory.VecArray("_OtherLightSpotAngles", MaxOtherLights);
 
-        private readonly CommandBuffer buffer = new CommandBuffer()
+        private readonly CommandBuffer buffer = new()
         {
             name = BufferName,
         };

@@ -17,12 +17,12 @@ namespace BMRP.Runtime
 
         private static readonly ShaderTagId[] LegacyShaderTagIds =
         {
-            new ShaderTagId("Always"),
-            new ShaderTagId("ForwardBase"),
-            new ShaderTagId("PrepassBase"),
-            new ShaderTagId("Vertex"),
-            new ShaderTagId("VertexLMRGBM"),
-            new ShaderTagId("VertexLM"),
+            new("Always"),
+            new("ForwardBase"),
+            new("PrepassBase"),
+            new("Vertex"),
+            new("VertexLMRGBM"),
+            new("VertexLM"),
         };
 
         private partial void PrepareBuffer()
