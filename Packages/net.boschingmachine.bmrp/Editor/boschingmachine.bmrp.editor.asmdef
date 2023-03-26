@@ -1,8 +1,9 @@
 {
     "name": "BMRP.Editor",
-    "rootNamespace": "",
+    "rootNamespace": "BMRP",
     "references": [
-        "GUID:037b928717976ff46af8d9ee6e6c5287"
+        "GUID:037b928717976ff46af8d9ee6e6c5287",
+        "GUID:b204f36aba32e044da630e368fe89536"
     ],
     "includePlatforms": [
         "Editor"

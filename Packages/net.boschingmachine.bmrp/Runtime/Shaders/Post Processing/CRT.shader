@@ -2,7 +2,7 @@ Shader "BMRP/Post Process/CRT"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
+        [HideInInspector] _MainTex ("Texture", 2D) = "white" {}
         _Uplift("Uplift", float) = 1.2
         _Amount ("Amount", Range(0.0, 1.0)) = 0.3
         _Distortion("Distortion", Range(0.0, 1.0)) = 0.0

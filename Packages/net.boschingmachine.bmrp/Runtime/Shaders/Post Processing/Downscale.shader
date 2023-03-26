@@ -2,7 +2,7 @@ Shader "BMRP/Post Process/Downscale"
 {
 	Properties
 	{
-		_MainTex ("Texture", 2D) = "white" {}
+		[HideInInspector] _MainTex ("Texture", 2D) = "white" {}
 		_MaxV("Max Vertical Resolution", int) = 720
 	}
 	SubShader

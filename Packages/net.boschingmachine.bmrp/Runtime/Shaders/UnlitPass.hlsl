@@ -8,6 +8,7 @@ SAMPLER(sampler_BaseMap);
 BUFFER_START
 
 DEF_PROP(float4, _BaseMap_ST)
+DEF_PROP(float4, _BaseMap_TexelSize)
 DEF_PROP(float4, _BaseColor)
 DEF_PROP(float, _Cutoff)
 DEF_PROP(float, _Wobble)
@@ -58,10 +59,11 @@ float4 frag (Varyings i) : SV_TARGET
 
     float4 baseMap = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.uv);
     float4 baseColor = baseMap * GET_PROP(_BaseColor);
+    DITHER_COLOR(baseColor, _BaseMap);
 
     #ifdef _CLIPPING
     clip(baseColor.a - GET_PROP(_Cutoff));
     #endif
-    
+
     return baseColor * (1 + _Value);
 }

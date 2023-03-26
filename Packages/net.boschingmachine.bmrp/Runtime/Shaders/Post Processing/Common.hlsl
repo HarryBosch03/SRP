@@ -11,22 +11,6 @@ float2 Downscale (float2 uv, float maxV, float4 texelSize)
     return floor(uv * tRes) / tRes;
 }
 
-float3 dither (int2 pixel, float3 t)
-{
-    const int d[] =
-        {
-         0,  8,  2, 10,
-        12,  4, 14,  6,
-         3, 11,  1,  9,
-        15,  7, 13,  5,
-        };
-    const int columns = 4;
-    const float divisor = 16.0;
-    
-    float b = (d[pixel.x % columns + columns * (pixel.y % columns)]) / divisor;
-    return t > b;
-}
-
 struct appdata
 {
     float4 vertex : POSITION;

@@ -1,6 +1,6 @@
 {
     "name": "net.boschingmachine.bmrp",
-    "rootNamespace": "",
+    "rootNamespace": "BMRP.Runtime",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

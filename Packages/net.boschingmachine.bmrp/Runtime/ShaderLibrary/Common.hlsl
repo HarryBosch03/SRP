@@ -40,3 +40,35 @@ float Square(float v)
 {
     return v * v;
 }
+
+float3 dither (int2 pixel, float3 t)
+{
+    const int d[] =
+        {
+        0,  8,  2, 10,
+       12,  4, 14,  6,
+        3, 11,  1,  9,
+       15,  7, 13,  5,
+       };
+    const int columns = 4;
+    const float divisor = 16.0;
+    
+    float b = (d[pixel.x % columns + columns * (pixel.y % columns)]) / divisor;
+    return t > b;
+}
+
+float3 ditherColor (float3 col, float2 pixelCoords)
+{
+    float3 lower = floor(col * 32) / 32;
+    float3 upper = lower + (1.0 / 32.0);
+    float3 diff = (col - lower) / (upper - lower);
+    float3 d = dither(pixelCoords, diff);
+    return lerp(lower, upper, d);
+}
+
+float3 ditherColor (float3 col, float2 uv, float4 texelSize)
+{
+    return ditherColor(col, uv * texelSize.zw);
+}
+
+#define DITHER_COLOR(col, _Texture) col.rgb = ditherColor(col.rgb, i.uv, _Texture ## _TexelSize)

@@ -64,7 +64,7 @@ namespace BMRP.Runtime
         {
             if (!IsActive) return;
 
-            foreach (var effect in settings.Effects)
+            foreach (var effect in settings.GetEffects())
             {
                 if (!effect) continue;
             

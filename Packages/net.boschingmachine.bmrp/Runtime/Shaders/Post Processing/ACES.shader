@@ -2,7 +2,7 @@ Shader "BMRP/Post Process/ACES"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
+        [HideInInspector] _MainTex ("Texture", 2D) = "white" {}
     }
     SubShader
     {

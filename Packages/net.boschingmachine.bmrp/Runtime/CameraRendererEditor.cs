@@ -13,7 +13,7 @@ namespace BMRP.Runtime
         private partial void DrawGizmosAfterFX();
 
 #if UNITY_EDITOR
-        string SampleName { get; set; }
+        private string SampleName { get; set; }
 
         private static readonly ShaderTagId[] LegacyShaderTagIds =
         {

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   downscale: 3
   effects:
-  - {fileID: 2100000, guid: 16cfa14752da0724c84ac5b9b38391be, type: 2}
-  - {fileID: 2100000, guid: c050e079803a30347a60434d6f2364d9, type: 2}
-  - {fileID: 2100000, guid: d058466601edb0c408472c3cfad9384d, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

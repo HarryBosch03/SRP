@@ -7,9 +7,13 @@ namespace BMRP.Runtime
     public class PostFXSettings : ScriptableObject
     {
         [SerializeField] private int downscale = 0;
-        [SerializeField] private List<Material> effects = new();
+        [SerializeField] private List<Material> effects;
 
         public int Downscale => downscale;
-        public List<Material> Effects => effects;
+
+        public List<Material> GetEffects()
+        {
+            return effects;
+        }
     }
 }

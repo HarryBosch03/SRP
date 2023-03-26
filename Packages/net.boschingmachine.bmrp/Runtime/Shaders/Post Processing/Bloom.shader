@@ -2,7 +2,7 @@ Shader "BMRP/Post Process/Bloom"
 {
 	Properties
 	{
-		_MainTex ("Texture", 2D) = "white" {}
+		[HideInInspector] _MainTex ("Texture", 2D) = "white" {}
 		_MaxV ("Max Vertical Resolution", int) = 2
 		_Threshold ("Threshold", float) = 1.1
 		_Strength ("Strength", float) = 2.0
@@ -10,7 +10,7 @@ Shader "BMRP/Post Process/Bloom"
 	SubShader
 	{
 		Cull Off ZWrite Off ZTest Always
-
+		
 		Pass
 		{
 			HLSLPROGRAM
