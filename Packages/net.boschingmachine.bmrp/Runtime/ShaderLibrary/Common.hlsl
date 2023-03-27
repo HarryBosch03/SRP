@@ -66,9 +66,14 @@ float3 ditherColor (float3 col, float2 pixelCoords)
     return lerp(lower, upper, d);
 }
 
-float3 ditherColor (float3 col, float2 uv, float4 texelSize)
-{
-    return ditherColor(col, uv * texelSize.zw);
-}
+#define CLIP_DITHER \
+float cutoff = GET_PROP(_Cutoff); \
+float a = max((baseColor.a - 1.0) / (1.0f - cutoff) + 1.0f, 0.0f); \
+if (cutoff >= 1.0) a = baseColor.a == 1.0f; \
+clip(dither(i.pos.xy, pow(a, 2.0)).r * 2.0 - 1.0);
 
-#define DITHER_COLOR(col, _Texture) col.rgb = ditherColor(col.rgb, i.uv, _Texture ## _TexelSize)
+#define CLIP_OTHER \
+float cutoff = GET_PROP(_Cutoff); \
+clip(baseColor.a - cutoff);
+
+#define DITHER_COLOR(col, _Texture) col.rgb = ditherColor(col.rgb, i.uv * _Texture ## _TexelSize.zw)

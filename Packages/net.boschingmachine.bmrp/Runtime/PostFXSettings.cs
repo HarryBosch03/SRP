@@ -7,10 +7,10 @@ namespace BMRP.Runtime
     public class PostFXSettings : ScriptableObject
     {
         [SerializeField] private int targetVerticalResolution = 360;
-        [SerializeField] private List<Material> effects;
+        [SerializeField][HideInInspector] private List<PostEffect> effects;
 
         public int TargetVerticalResolution => targetVerticalResolution;
 
-        public List<Material> Effects => effects;
+        public List<PostEffect> Effects => effects;
     }
 }

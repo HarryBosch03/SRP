@@ -8,10 +8,11 @@
 TEXTURE2D(_BaseMap);
 SAMPLER(sampler_BaseMap);
 
+float4 _BaseMap_TexelSize;
+
 BUFFER_START
 
 DEF_PROP(float4, _BaseMap_ST)
-DEF_PROP(float4, _BaseMap_TexelSize)
 DEF_PROP(float4, _BaseColor)
 DEF_PROP(float, _Cutoff)
 DEF_PROP(float, _Wobble)
@@ -84,10 +85,10 @@ float4 frag (Varyings i) : SV_TARGET
     DITHER_COLOR(baseColor, _BaseMap) * i.color;
 
 #ifdef _ALPHA_DITHER
-    clip(dither(i.pos.xy, pow(baseColor.a, 2.0)).r * 2.0 - 1.0);
+   CLIP_DITHER
 #elif defined(_CLIPPING)
-    clip(baseColor.a - GET_PROP(_Cutoff));
+    CLIP_OTHER
 #endif
-
+    
     return baseColor;
 }

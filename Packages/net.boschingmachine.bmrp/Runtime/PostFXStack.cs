@@ -68,7 +68,7 @@ namespace BMRP.Runtime
             {
                 if (!effect) continue;
             
-                Buffer.Blit(SourceBuffer, TargetBuffer, effect);
+                effect.Apply(this);
                 SwapBuffers();
             }
 

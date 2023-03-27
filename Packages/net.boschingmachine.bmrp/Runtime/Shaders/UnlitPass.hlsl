@@ -61,9 +61,11 @@ float4 frag (Varyings i) : SV_TARGET
     float4 baseColor = baseMap * GET_PROP(_BaseColor);
     DITHER_COLOR(baseColor, _BaseMap);
 
-    #ifdef _CLIPPING
-    clip(baseColor.a - GET_PROP(_Cutoff));
-    #endif
+#ifdef _ALPHA_DITHER
+    CLIP_DITHER
+ #elif defined(_CLIPPING)
+     CLIP_OTHER
+ #endif
 
     return baseColor * (1 + _Value);
 }

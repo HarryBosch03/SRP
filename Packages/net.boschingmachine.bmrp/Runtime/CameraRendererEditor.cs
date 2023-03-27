@@ -45,7 +45,7 @@ namespace BMRP.Runtime
             }
 
             var filteringSettings = FilteringSettings.defaultValue;
-            context.DrawRenderers(cullingResults, ref drawingSettings, ref filteringSettings);
+            Context.DrawRenderers(cullingResults, ref drawingSettings, ref filteringSettings);
         }
 
         private partial void PrepareForSceneWindow()
@@ -59,13 +59,13 @@ namespace BMRP.Runtime
         private partial void DrawGizmosBeforeFX()
         {
             if (!UnityEditor.Handles.ShouldRenderGizmos()) return;
-            context.DrawGizmos(Camera, GizmoSubset.PreImageEffects);
+            Context.DrawGizmos(Camera, GizmoSubset.PreImageEffects);
         }
 
         private partial void DrawGizmosAfterFX()
         {
             if (!UnityEditor.Handles.ShouldRenderGizmos()) return;
-            context.DrawGizmos(Camera, GizmoSubset.PostImageEffects);
+            Context.DrawGizmos(Camera, GizmoSubset.PostImageEffects);
         }
 #else
     const string SampleName = bufferName;

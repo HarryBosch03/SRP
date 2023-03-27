@@ -8,7 +8,6 @@ namespace BMRP.Runtime
         private const string BufferName = "Render Camera";
 
         private CullingResults cullingResults;
-        private ScriptableRenderContext context;
         private Lighting lighting;
         private readonly PostFXStack postFXStack = new();
         private CameraSettings settings;
@@ -26,6 +25,7 @@ namespace BMRP.Runtime
             WobbleAmount = ShaderPropertyFactory.Float("_WobbleAmount");
         
         public Camera Camera { get; private set; }
+        public ScriptableRenderContext Context { get; private set; }
         public CommandBuffer Buffer { get; } = new()
         {
             name = BufferName,
@@ -33,7 +33,7 @@ namespace BMRP.Runtime
         
         public void Render(ScriptableRenderContext context, Camera camera, CameraSettings settings)
         {
-            this.context = context;
+            this.Context = context;
             this.Camera = camera;
             this.settings = settings;
 
@@ -59,10 +59,10 @@ namespace BMRP.Runtime
 
         private void Setup()
         {
-            context.SetupCameraProperties(Camera);
+            Context.SetupCameraProperties(Camera);
             var clearFlags = Camera.clearFlags;
             
-            postFXStack.Setup(context, Camera, Buffer, settings.postFXSettings, ref clearFlags);
+            postFXStack.Setup(Context, Camera, Buffer, settings.postFXSettings, ref clearFlags);
             
             Buffer.ClearRenderTarget(
                 clearFlags <= CameraClearFlags.Depth, 
@@ -88,7 +88,7 @@ namespace BMRP.Runtime
         {
             if (!Camera.TryGetCullingParameters(out var p)) return true;
             
-            cullingResults = context.Cull(ref p);
+            cullingResults = Context.Cull(ref p);
             return false;
         }
         
@@ -108,28 +108,28 @@ namespace BMRP.Runtime
             
             var filterSettings = new FilteringSettings(RenderQueueRange.opaque);
             
-            context.DrawRenderers(cullingResults, ref drawingSettings, ref filterSettings);
+            Context.DrawRenderers(cullingResults, ref drawingSettings, ref filterSettings);
             
-            context.DrawSkybox(Camera);
-
+            Context.DrawSkybox(Camera);
+            
             sortingSettings.criteria = SortingCriteria.CommonTransparent;
             drawingSettings.sortingSettings = sortingSettings;
             filterSettings.renderQueueRange = RenderQueueRange.transparent;
-            context.DrawRenderers(cullingResults, ref drawingSettings, ref filterSettings);
+            Context.DrawRenderers(cullingResults, ref drawingSettings, ref filterSettings);
             
-            LensFlare.DrawAll(this);
+            Flare.DrawAll(this);
         }
 
         private void Submit()
         {
             Buffer.EndSample(SampleName);
             ExecuteBuffer();
-            context.Submit();   
+            Context.Submit();   
         }
 
         private void ExecuteBuffer()
         {
-            context.ExecuteCommandBuffer(Buffer);
+            Context.ExecuteCommandBuffer(Buffer);
             Buffer.Clear();
         }
         

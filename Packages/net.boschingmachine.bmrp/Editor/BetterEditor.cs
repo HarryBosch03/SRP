@@ -2,6 +2,7 @@
 using BMRP.Runtime;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace Code.Scripts.Editor
@@ -19,20 +20,35 @@ namespace Code.Scripts.Editor
         protected static void SectionWithoutBackground(string name, System.Action bodyCallback) => Section(name, bodyCallback, s => GUIStyle.none);
         protected static void Section(string name, System.Action bodyCallback, System.Func<GUIStyle, GUIStyle> style)
         {
+            Section(name, () => { }, bodyCallback, style);
+        }
+
+        protected static void Section(string reference, System.Action headerCallback, System.Action bodyCallback, System.Func<GUIStyle, GUIStyle> style)
+        {
             using var section = new EditorGUILayout.VerticalScope(style(EditorStyles.helpBox));
             var indent = EditorGUI.indentLevel++;
             
-            if (Foldout(name)) bodyCallback();
-            
+            if (Foldout(reference, headerCallback)) bodyCallback();
+
             EditorGUI.indentLevel = indent;
         }
 
-
         protected static bool Foldout(string name)
         {
-            var get = GetFoldoutState(name);
-            var set = EditorGUILayout.Foldout(get, name, true);
-            SetFoldoutState(name, set);
+            return Foldout(name, () => {});
+        }
+
+        protected static bool Foldout(string reference, System.Action headerCallback)
+        {
+            var get = GetFoldoutState(reference);
+
+            bool set;
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                set = EditorGUILayout.Foldout(get, reference, true);
+                headerCallback();
+            }
+            SetFoldoutState(reference, set);
             return set;
         }
 

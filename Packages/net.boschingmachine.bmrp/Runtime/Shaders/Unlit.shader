@@ -10,6 +10,7 @@ Shader "BMRP/Unlit"
 		[MainTexture]_BaseMap("Texture", 2D) = "white" {}
 		[MainColor]_BaseColor ("Color", Color) = (1, 1, 1, 1)
 		_Value ("Brightness", float) = 0.0
+		[Toggle(_ALPHA_DITHER)] _AlphaDither ("Alpha Dithering", Float) = 0
 		[Toggle(_CLIPPING)] _Clipping ("Alpha Clipping", Float) = 0
 		_Cutoff ("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
 		
@@ -31,6 +32,7 @@ Shader "BMRP/Unlit"
 
 			#pragma shader_feature _WOBBLE
 			#pragma shader_feature _UVDISTORT
+			#pragma shader_feature _ALPHA_DITHER
             
 			#pragma multi_compile_instancing
 			#pragma vertex vert

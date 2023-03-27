@@ -14,7 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetVerticalResolution: 270
   effects:
-  - {fileID: 2100000, guid: c050e079803a30347a60434d6f2364d9, type: 2}
-  - {fileID: 2100000, guid: 0f27277e548a6ce4d9a811e7f251fdeb, type: 2}
-  - {fileID: 2100000, guid: 16cfa14752da0724c84ac5b9b38391be, type: 2}
-  - {fileID: 2100000, guid: d058466601edb0c408472c3cfad9384d, type: 2}
+  - {fileID: 0}
