@@ -1,7 +1,8 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace Code.Scripts.Utility
+namespace BMRP.Runtime
 {
     public static class Extensions
     {
@@ -76,6 +77,11 @@ namespace Code.Scripts.Utility
         public static bool IsCapital(this char c)
         {
             return c - 65 < 26;
+        }
+        
+        public static void SortBy<T> (this List<T> list, System.Func<T, float> v)
+        {
+            list.Sort(ScalarComparison.AscendingFloat(v));
         }
     }
 }

@@ -11,6 +11,7 @@ Shader "BMRP/Lit"
 		[MainColor]_BaseColor ("Color", Color) = (1, 1, 1, 1)
     	_SpecAmount ("Specular Brightness", float) = 0.5
     	_SpecExp ("Specular Exponent", float) = 50.0
+		[Toggle(_ALPHA_DITHER)] _AlphaDither ("Alpha Dithering", Float) = 0
 		[Toggle(_CLIPPING)] _Clipping ("Alpha Clipping", Float) = 0
 		_Cutoff ("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
 		
@@ -37,6 +38,8 @@ Shader "BMRP/Lit"
             #pragma target 5.0 
 			#pragma shader_feature _WOBBLE
 			#pragma shader_feature _UVDISTORT
+			#pragma shader_feature _CLIPPING
+			#pragma shader_feature _ALPHA_DITHER
             
             #pragma multi_compile_instancing
             #pragma vertex vert

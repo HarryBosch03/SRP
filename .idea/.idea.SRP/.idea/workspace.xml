@@ -2,20 +2,42 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="01ff930d-949d-4f33-bf55-d1a3b065cf91" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/BetterEditorToolkit.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/BetterEditorToolkit.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/ScalarComparison.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/ScalarComparison.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Shaders/LensFlare.shader" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Shaders/LensFlare.shader.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Shaders/Post Processing/ColorGrading.shader" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Shaders/Post Processing/ColorGrading.shader.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SRP/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SRP/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/Unlit 3.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Unlit 3.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/Transparent.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Transparent.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Rendering/Post FX Settings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Rendering/Post FX Settings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/BetterEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/BetterEditor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/Extensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Extensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/Extensions.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Extensions.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/PostFXSettingsEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/PostFXSettingsEditor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/Util.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Util.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/Util.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Util.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/CameraRenderer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/CameraRenderer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/CameraRendererEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/CameraRendererEditor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Lighting.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Lighting.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Materials/Post Process/ACES.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Materials/Post Process/ACES.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Materials/Post Process/Bloom.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Materials/Post Process/Bloom.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Materials/Post Process/CRT.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Materials/Post Process/CRT.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Materials/Post Process/Dither.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Materials/Post Process/Dither.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/QualitySettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/QualitySettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SRP.sln.DotSettings" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/PostFXSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/PostFXSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/PostFXStack.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/PostFXStack.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/ShaderLibrary/Common.hlsl" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/ShaderLibrary/Common.hlsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/ShaderLibrary/UnityInput.hlsl" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/ShaderLibrary/UnityInput.hlsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/ShaderProperty.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/ShaderProperty.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Shaders/Lit.shader" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Shaders/Lit.shader" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Shaders/LitPass.hlsl" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Shaders/LitPass.hlsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Shaders/Post Processing/Bloom.shader" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Shaders/Post Processing/Bloom.shader" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Shaders/Post Processing/Common.hlsl" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Shaders/Post Processing/Common.hlsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Shaders/Post Processing/Post FX Registry.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Shaders/Post Processing/Post FX Registry.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,16 +45,23 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/66e151436a4945b595f4b482260aa84d77a00/8c/ebedb4eb/BindingExtensions.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dc1a47a5816e4be7bc6817ee4d339e75816c00/4d/04fcb4a2/InspectorWindow.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dc1a47a5816e4be7bc6817ee4d339e75816c00/57/fe6dc68a/Editor.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dc1a47a5816e4be7bc6817ee4d339e75816c00/f9/fd617d88/MaterialEditor.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c399efc08928422d8828d74a2b19ffba158600/36/de511c46/Mathf.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c399efc08928422d8828d74a2b19ffba158600/e2/57d375e1/Rect.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dc1a47a5816e4be7bc6817ee4d339e75816c00/30/327167fb/EditorGUILayout.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dc1a47a5816e4be7bc6817ee4d339e75816c00/65/3cde881f/SerializedProperty.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dc1a47a5816e4be7bc6817ee4d339e75816c00/cb/2dcc7b34/EditorGUI.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e7f2b8407dc441f28814515d15959b551a000/0c/78c5c600/Rigidbody.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e7f2b8407dc441f28814515d15959b551a000/36/f076d89d/CapsuleCollider.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d44b17e136d09081da1e8fd0e8c83fde60e11818b9f2442d7ed8cb733fae895e/System.Collections.Generic.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@12.1.7/Runtime/Textures/RTHandleSystem.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@12.1.7/ShaderLibrary/API/D3D11.hlsl" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@12.1.7/ShaderLibrary/SpaceTransforms.hlsl" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/ColorGradingVolumeEditor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/PostFXSettingsEditor.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/Util.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/boschingmachine.bmrp.editor.asmdef" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/ColorGradingVolume.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/LensFlare.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/Util.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -49,7 +78,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.sourceCode.C#",
+    "settings.editor.selected.configurable": "preferences.keymap",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -115,14 +144,27 @@
       <workItem from="1679813473210" duration="4451000" />
       <workItem from="1679820776210" duration="4649000" />
       <workItem from="1679832273288" duration="6795000" />
+      <workItem from="1679872819685" duration="17209000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>

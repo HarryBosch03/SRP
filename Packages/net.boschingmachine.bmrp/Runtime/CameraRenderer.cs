@@ -7,14 +7,8 @@ namespace BMRP.Runtime
     {
         private const string BufferName = "Render Camera";
 
-        private readonly CommandBuffer buffer = new()
-        {
-            name = BufferName,
-        };
-
         private CullingResults cullingResults;
         private ScriptableRenderContext context;
-        private Camera camera;
         private Lighting lighting;
         private readonly PostFXStack postFXStack = new();
         private CameraSettings settings;
@@ -31,10 +25,16 @@ namespace BMRP.Runtime
         private static readonly ShaderProperty<float>
             WobbleAmount = ShaderPropertyFactory.Float("_WobbleAmount");
         
+        public Camera Camera { get; private set; }
+        public CommandBuffer Buffer { get; } = new()
+        {
+            name = BufferName,
+        };
+        
         public void Render(ScriptableRenderContext context, Camera camera, CameraSettings settings)
         {
             this.context = context;
-            this.camera = camera;
+            this.Camera = camera;
             this.settings = settings;
 
             PrepareBuffer();
@@ -59,16 +59,16 @@ namespace BMRP.Runtime
 
         private void Setup()
         {
-            context.SetupCameraProperties(camera);
-            var clearFlags = camera.clearFlags;
+            context.SetupCameraProperties(Camera);
+            var clearFlags = Camera.clearFlags;
             
-            postFXStack.Setup(context, camera, buffer, settings.postFXSettings, ref clearFlags);
+            postFXStack.Setup(context, Camera, Buffer, settings.postFXSettings, ref clearFlags);
             
-            buffer.ClearRenderTarget(
+            Buffer.ClearRenderTarget(
                 clearFlags <= CameraClearFlags.Depth, 
                 clearFlags == CameraClearFlags.Color, 
-                clearFlags == CameraClearFlags.Color ? camera.backgroundColor.linear : Color.clear);
-            buffer.BeginSample(BufferName);
+                clearFlags == CameraClearFlags.Color ? Camera.backgroundColor.linear : Color.clear);
+            Buffer.BeginSample(BufferName);
             ExecuteBuffer();
 
             SetGlobals();
@@ -79,12 +79,14 @@ namespace BMRP.Runtime
             ScreenSize.Value = new Vector4(Screen.width, Screen.height, 1.0f / Screen.width, 1.0f / Screen.height);
             WobbleAmount.Value = settings.globalVertexWobbleAmount;
 
-            ShaderProperty.SendAll(buffer, ScreenSize, WobbleAmount);
+            ShaderProperty.SendAll(Buffer, ScreenSize, WobbleAmount);
+            
+            ColorGradingVolume.SetWeights(this);
         }
 
         private bool Cull()
         {
-            if (!camera.TryGetCullingParameters(out var p)) return true;
+            if (!Camera.TryGetCullingParameters(out var p)) return true;
             
             cullingResults = context.Cull(ref p);
             return false;
@@ -92,7 +94,7 @@ namespace BMRP.Runtime
         
         private void DrawVisibleGeometry(bool useDynamicBatching, bool useGPUInstancing)
         {
-            var sortingSettings = new SortingSettings(camera)
+            var sortingSettings = new SortingSettings(Camera)
             {
                 criteria = SortingCriteria.CommonOpaque,
             };
@@ -108,25 +110,27 @@ namespace BMRP.Runtime
             
             context.DrawRenderers(cullingResults, ref drawingSettings, ref filterSettings);
             
-            context.DrawSkybox(camera);
+            context.DrawSkybox(Camera);
 
             sortingSettings.criteria = SortingCriteria.CommonTransparent;
             drawingSettings.sortingSettings = sortingSettings;
             filterSettings.renderQueueRange = RenderQueueRange.transparent;
             context.DrawRenderers(cullingResults, ref drawingSettings, ref filterSettings);
+            
+            LensFlare.DrawAll(this);
         }
 
         private void Submit()
         {
-            buffer.EndSample(SampleName);
+            Buffer.EndSample(SampleName);
             ExecuteBuffer();
             context.Submit();   
         }
 
         private void ExecuteBuffer()
         {
-            context.ExecuteCommandBuffer(buffer);
-            buffer.Clear();
+            context.ExecuteCommandBuffer(Buffer);
+            Buffer.Clear();
         }
         
         private void Cleanup()

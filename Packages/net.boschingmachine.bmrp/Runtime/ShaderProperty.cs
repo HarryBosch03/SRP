@@ -47,15 +47,17 @@ namespace BMRP.Runtime
             this.setCallback = setCallback;
         }
 
-        public void Set(T value)
+        public ShaderProperty<T> Set(T value)
         {
             Value = value;
             Send();
+            return this;
         }
         
         public override void Send()
         {
-            setCallback(ActiveBuffer, this);
+            if (ActiveBuffer == null) throw new NullReferenceException("Active buffer was not set!");
+                setCallback(ActiveBuffer, this);
             ActualValue = Value;
         }
     }

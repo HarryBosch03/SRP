@@ -45,10 +45,10 @@ float3 dither (int2 pixel, float3 t)
 {
     const int d[] =
         {
-        0,  8,  2, 10,
-       12,  4, 14,  6,
-        3, 11,  1,  9,
-       15,  7, 13,  5,
+        0,  8,  2,  10,
+        12, 4,  14, 6,
+        3,  11, 1,  9,
+        15, 7,  13, 5,
        };
     const int columns = 4;
     const float divisor = 16.0;

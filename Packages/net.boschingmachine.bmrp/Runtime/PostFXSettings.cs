@@ -6,10 +6,10 @@ namespace BMRP.Runtime
     [CreateAssetMenu(menuName = "Rendering/Post FX Settings")]
     public class PostFXSettings : ScriptableObject
     {
-        [SerializeField] private int downscale = 0;
+        [SerializeField] private int targetVerticalResolution = 360;
         [SerializeField] private List<Material> effects;
 
-        public int Downscale => downscale;
+        public int TargetVerticalResolution => targetVerticalResolution;
 
         public List<Material> Effects => effects;
     }

@@ -17,18 +17,18 @@ namespace BMRP.Editor
         {
             Section("General Settings", () => { base.OnInspectorGUI(); });
             Separator();
-            Section("Material Settings", () =>
+            SectionWithoutBackground("Material Settings", () =>
             {
                 foreach (var effects in Target.Effects)
                 {
-                    Section(effects.name, () =>
+                    SectionWithoutBackground(effects.name, () =>
                     {
                         var editor = CreateEditor(effects);
                         InternalEditorUtility.SetIsInspectorExpanded(effects, true);
                         editor.OnInspectorGUI();
-                    }, false);
+                    });
                 }
-            }, false);
+            });
             Separator();
             Section("Utility", () =>
             {

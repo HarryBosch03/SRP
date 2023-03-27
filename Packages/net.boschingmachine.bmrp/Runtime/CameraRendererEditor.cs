@@ -28,13 +28,13 @@ namespace BMRP.Runtime
         private partial void PrepareBuffer()
         {
             Profiler.BeginSample("Editor Only");
-            buffer.name = SampleName = camera.name;
+            Buffer.name = SampleName = Camera.name;
             Profiler.EndSample();
         }
 
         private partial void DrawUnsupportedShaders()
         {
-            var drawingSettings = new DrawingSettings(LegacyShaderTagIds[0], new SortingSettings(camera))
+            var drawingSettings = new DrawingSettings(LegacyShaderTagIds[0], new SortingSettings(Camera))
             {
                 overrideMaterial = ErrorMaterial,
             };
@@ -50,22 +50,22 @@ namespace BMRP.Runtime
 
         private partial void PrepareForSceneWindow()
         {
-            if (camera.cameraType == CameraType.SceneView)
+            if (Camera.cameraType == CameraType.SceneView)
             {
-                ScriptableRenderContext.EmitWorldGeometryForSceneView(camera);
+                ScriptableRenderContext.EmitWorldGeometryForSceneView(Camera);
             }
         }
 
         private partial void DrawGizmosBeforeFX()
         {
             if (!UnityEditor.Handles.ShouldRenderGizmos()) return;
-            context.DrawGizmos(camera, GizmoSubset.PreImageEffects);
+            context.DrawGizmos(Camera, GizmoSubset.PreImageEffects);
         }
 
         private partial void DrawGizmosAfterFX()
         {
             if (!UnityEditor.Handles.ShouldRenderGizmos()) return;
-            context.DrawGizmos(camera, GizmoSubset.PostImageEffects);
+            context.DrawGizmos(Camera, GizmoSubset.PostImageEffects);
         }
 #else
     const string SampleName = bufferName;

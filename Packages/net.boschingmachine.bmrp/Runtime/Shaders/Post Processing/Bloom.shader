@@ -3,7 +3,7 @@ Shader "BMRP/Post Process/Bloom"
 	Properties
 	{
 		[HideInInspector] _MainTex ("Texture", 2D) = "white" {}
-		_MaxV ("Max Vertical Resolution", int) = 2
+		_MaxV ("Max Vertical Resolution", int) = 32
 		_Threshold ("Threshold", float) = 1.1
 		_Strength ("Strength", float) = 2.0
 	}

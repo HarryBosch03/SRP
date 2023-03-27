@@ -42,10 +42,10 @@ namespace BMRP.Runtime
             SourceBuffer = fxBuffer1;
             TargetBuffer = fxBuffer2;
 
-            var downscale = Mathf.Max(1, settings.Downscale);
-
-            width = camera.pixelWidth / downscale;
-            height = camera.pixelHeight / downscale;
+            var downscale = Mathf.Max(1.0f, (float)camera.pixelHeight / settings.TargetVerticalResolution);
+            
+            width = (int)(camera.pixelWidth / downscale);
+            height = (int)(camera.pixelHeight / downscale);
 
             outerBuffer.GetTemporaryRT(SourceBuffer, width, height, 32, FilterMode.Point,
                 RenderTextureFormat.DefaultHDR);

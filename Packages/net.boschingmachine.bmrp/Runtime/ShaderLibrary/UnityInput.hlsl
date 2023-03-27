@@ -28,3 +28,4 @@ float4 screenSize;
 
 float3 _WorldSpaceCameraPos;
 float4 _ProjectionParams;
+float4 _ScreenParams;
