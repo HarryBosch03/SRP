@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Reflection;
 using BMRP.Runtime.PostFX;
+using Editorator.Editor;
 using UnityEditor.Experimental.GraphView;
 
 namespace BMRP.Editor
@@ -20,9 +21,14 @@ namespace BMRP.Editor
 
         public override void OnInspectorGUI()
         {
-            Section("General Settings", () => { base.OnInspectorGUI(); });
-            Separator();
-            SectionWithoutBackground("Post Effect Settings", () =>
+            E.FoldoutSection("General Settings", () =>
+            {
+                base.OnInspectorGUI();
+            });
+
+            E.Separator();
+            
+            E.FoldoutSection("Post Effect Settings", () =>
             {
                 Target.Effects.RemoveAll(e => !e);
 
@@ -31,12 +37,9 @@ namespace BMRP.Editor
                     DrawEffect(effect);
                 }
 
-                if (GUILayout.Button("Add...", EditorStyles.popup))
-                {
-                    AddNewEffectMenu();
-                }
+                E.Button("Add...", AddNewEffectMenu);
             });
-
+            
             if (deletedEffects.Count <= 0) return;
             
             Undo.RecordObject(Target, "Removed Effects from Post Process Stack");
@@ -52,6 +55,21 @@ namespace BMRP.Editor
 
         private void DrawEffect(PostEffect effect)
         {
+            E.FoldoutSection(effect.name, r =>
+            {
+                r.x += r.width - r.height * 2.0f;
+                r.width = r.height * 2.0f;
+                E.ImageButton("TreeEditor.Trash", () =>
+                {
+                    deletedEffects.Enqueue(effect);
+                });
+
+            }, () =>
+            {
+                E.Separator();
+                E.AllVisibleProperties(effect);
+            });
+            
             Section(
                 effect.name,
                 () =>
@@ -68,17 +86,6 @@ namespace BMRP.Editor
                 },
                 () =>
                 {
-                    Separator();
-                    var so = new SerializedObject(effect);
-                    var prop = so.GetIterator();
-                    prop.Next(true);
-                    prop.NextVisible(true);
-                    while (prop.NextVisible(true))
-                    {
-                        EditorGUILayout.PropertyField(prop);
-                    }
-
-                    so.ApplyModifiedProperties();
                 },
                 s => s);
         }

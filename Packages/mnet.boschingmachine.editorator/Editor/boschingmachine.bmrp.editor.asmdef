@@ -1,6 +1,6 @@
 {
     "name": "net.boschingmachine.editorator",
-    "rootNamespace": "Editorator.Editor",
+    "rootNamespace": "Editorator",
     "includePlatforms": [
         "Editor"
     ],

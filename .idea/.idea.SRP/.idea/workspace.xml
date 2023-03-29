@@ -2,15 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="01ff930d-949d-4f33-bf55-d1a3b065cf91" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/PostFX/BloomEffect.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/Button.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/Button.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/DataManagment.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/DataManagment.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/Foldout.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/Foldout.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/FoldoutSection.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/FoldoutSection.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/Properties.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/Properties.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/Section.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/Section.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/Seperator.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/Seperator.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SRP/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SRP/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/boschingmachine.bmrp.editor.asmdef" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/mnet.boschingmachine.editorator/Editor/boschingmachine.bmrp.editor.asmdef" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/PostFXSettingsEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/PostFXSettingsEditor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/PostFX/AcesEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/PostFX/AcesEffect.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/PostFX/PostEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/PostFX/PostEffect.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/PostFX/PostEffectSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/PostFX/PostEffectSettings.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/PostFXSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Runtime/PostFXSettings.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/boschingmachine.bmrp.editor.asmdef" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/net.boschingmachine.bmrp/Editor/boschingmachine.bmrp.editor.asmdef" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SRP.sln.DotSettings" beforeDir="false" afterPath="$PROJECT_DIR$/SRP.sln.DotSettings" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +121,7 @@
       <workItem from="1679832273288" duration="6795000" />
       <workItem from="1679872819685" duration="17209000" />
       <workItem from="1679899995056" duration="19132000" />
-      <workItem from="1680072366195" duration="1482000" />
+      <workItem from="1680072366195" duration="5708000" />
     </task>
     <servers />
   </component>
