@@ -1,7 +1,10 @@
+using UnityEditor;
+using UnityEngine;
+
 namespace Editorator.Editor
 {
-    public class Element
+    public abstract class Element
     {
-        
+        public abstract void Finish();
     }
 }
