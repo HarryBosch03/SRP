@@ -3,12 +3,14 @@ using UnityEditor;
 
 namespace Editorator.Editor
 {
-    public static partial class E
+    public class Section : Element
     {
-        public static void Section(Action body)
+        public Body body;
+        
+        public override void Finish()
         {
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
-            using (new EditorGUI.IndentLevelScope())
+            using (new EditorGUI.IndentLevelScope(1 - EditorGUI.indentLevel))
             {
                 body();
             }

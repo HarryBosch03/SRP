@@ -3,24 +3,35 @@ using UnityEngine;
 
 namespace Editorator.Editor
 {
-    public static partial class E
+    public class FoldoutSection : Element
     {
-        public static void FoldoutSection(string reference, Action body)
+        private readonly Foldout foldout;
+        private readonly Section section;
+        
+        public FoldoutSection(string reference)
         {
-            Section(() => Foldout(reference, () =>
+            foldout = new Foldout(reference);
+            section = new Section
             {
-                Separator(0.0f, 0.5f);
-                body();
-            }));
+                body = () => foldout.Finish()
+            };
         }
 
-        public static void FoldoutSection(string reference, Action<Rect> header, Action body)
+        public FoldoutSection Header(Header header)
         {
-            Section(() => Foldout(reference, header, () =>
-            {
-                Separator();
-                body();
-            }));
+            foldout.header = header;
+            return this;
+        }
+        
+        public FoldoutSection Body(Body body)
+        {
+            foldout.body = body;
+            return this;
+        }
+        
+        public override void Finish()
+        {
+            section.Finish();
         }
     }
 }

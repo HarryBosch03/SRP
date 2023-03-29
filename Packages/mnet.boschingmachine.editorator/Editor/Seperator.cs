@@ -3,14 +3,16 @@ using UnityEngine;
 
 namespace Editorator.Editor
 {
-    public static partial class E
+    public class Separator : ScalableElement
     {
-        public static void Separator(float alignment = 0.5f, float lineHeight = 1.0f)
+        public float alignment = 0.5f;
+
+        public override void Finish(Rect r)
         {
-            var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight * lineHeight);
+            var rect = r;
             rect.y += rect.height * alignment;
             rect.height = 1.0f;
-            EditorGUI.DrawRect(rect, new Color(1.0f, 1.0f, 1.0f, 0.2f));
+            EditorGUI.DrawRect(rect, new Color(1.0f, 1.0f, 1.0f, 0.2f));            
         }
     }
 }

@@ -16,19 +16,28 @@ namespace BMRP.Editor
     public class PostFXSettingsEditor : BetterEditor
     {
         private PostFXSettings Target => target as PostFXSettings;
+        private readonly List<PostEffect> buffer = new();
 
-        private Queue<PostEffect> deletedEffects = new();
+        bool gSetFoldout;
 
         public override void OnInspectorGUI()
         {
-            E.FoldoutSection("General Settings", () =>
+            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
-                base.OnInspectorGUI();
-            });
+                gSetFoldout = EditorGUILayout.Foldout(gSetFoldout, "General Settings", true);
+                if (gSetFoldout)
+                {
+                    base.OnInspectorGUI();
+                }
+            }
 
-            E.Separator();
             
-            E.FoldoutSection("Post Effect Settings", () =>
+            
+            new FoldoutSection("General Settings").Body(() => { base.OnInspectorGUI(); }).Finish();
+
+            new Separator();
+
+            new FoldoutSection("Post Effect Settings").Body(() =>
             {
                 Target.Effects.RemoveAll(e => !e);
 
@@ -37,57 +46,36 @@ namespace BMRP.Editor
                     DrawEffect(effect);
                 }
 
-                E.Button("Add...", AddNewEffectMenu);
-            });
-            
-            if (deletedEffects.Count <= 0) return;
-            
-            Undo.RecordObject(Target, "Removed Effects from Post Process Stack");
-            while (deletedEffects.Count > 0)
-            {
-                var effect = deletedEffects.Dequeue();
-                Target.Effects.Remove(effect);
-                DestroyImmediate(effect);
-            }
-            
+                new Button()
+                {
+                    defaultContent = new GUIContent("Add..."),
+                    callback = AddNewEffectMenu
+                }.Finish();
+            }).Finish();
+
+            Target.Effects.Clear();
+            Target.Effects.AddRange(buffer);
+
             SceneView.RepaintAll();
         }
 
         private void DrawEffect(PostEffect effect)
         {
-            E.FoldoutSection(effect.name, r =>
+            new FoldoutSection(effect.name).Header(r =>
             {
+                GUI.Label(r, effect.name);
+
                 r.x += r.width - r.height * 2.0f;
                 r.width = r.height * 2.0f;
-                E.ImageButton("TreeEditor.Trash", () =>
+                new Button()
                 {
-                    deletedEffects.Enqueue(effect);
-                });
-
-            }, () =>
+                    callback = () => buffer.Remove(effect)
+                }.EditorImage("TreeEditor.Trash").Finish(r);
+            }).Body(() =>
             {
-                E.Separator();
+                new Separator();
                 E.AllVisibleProperties(effect);
-            });
-            
-            Section(
-                effect.name,
-                () =>
-                {
-                    var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
-
-                    rect.x += rect.width - rect.height * 2.0f;
-                    rect.width = rect.height * 2.0f;
-
-                    if (GUI.Button(rect, EditorGUIUtility.IconContent("TreeEditor.Trash")))
-                    {
-                        deletedEffects.Enqueue(effect);
-                    }
-                },
-                () =>
-                {
-                },
-                s => s);
+            }).Finish();
         }
 
         private void AddNewEffectMenu()
@@ -132,7 +120,7 @@ namespace BMRP.Editor
             var instance = (PostEffect)CreateInstance(type);
             instance.name = instance.DisplayName;
             if (dupes > 0) instance.name += $".{dupes + 1}";
-            Target.Effects.Add(instance);
+            buffer.Add(instance);
 
             SceneView.RepaintAll();
         }
@@ -140,7 +128,7 @@ namespace BMRP.Editor
         public class SearchProvider : ScriptableObject, ISearchWindowProvider
         {
             public IEnumerable<System.Type> types;
-            public System.Action<System.Type> callback;
+            public Action<System.Type> callback;
 
             public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
             {
@@ -152,7 +140,7 @@ namespace BMRP.Editor
                     var tmp = (PostEffect)CreateInstance(type);
                     var name = tmp.DisplayName;
                     DestroyImmediate(tmp);
-                    
+
                     searchList.Add(new SearchTreeEntry(new GUIContent(name))
                     {
                         level = 1,
