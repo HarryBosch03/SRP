@@ -6,6 +6,7 @@ using Code.Scripts.Editor;
 using UnityEditor;
 using UnityEngine;
 using System.Reflection;
+using BMRP.Runtime.PostFX;
 using UnityEditor.Experimental.GraphView;
 
 namespace BMRP.Editor
@@ -45,6 +46,8 @@ namespace BMRP.Editor
                 Target.Effects.Remove(effect);
                 DestroyImmediate(effect);
             }
+            
+            SceneView.RepaintAll();
         }
 
         private void DrawEffect(PostEffect effect)
@@ -123,6 +126,8 @@ namespace BMRP.Editor
             instance.name = instance.DisplayName;
             if (dupes > 0) instance.name += $".{dupes + 1}";
             Target.Effects.Add(instance);
+
+            SceneView.RepaintAll();
         }
 
         public class SearchProvider : ScriptableObject, ISearchWindowProvider

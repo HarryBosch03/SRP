@@ -1,27 +1,9 @@
-using System;
-using UnityEngine;
-
-namespace BMRP.Runtime
+namespace BMRP.Runtime.PostFX
 {
-    public class AcesEffect : PostEffect
+    [System.Serializable]
+    public class AcesEffect : PostEffectBlit
     {
-        private Material mat;
-
-        private void Awake()
-        {
-            mat = new Material(Shader.Find("BMRP/Post Process/ACES"));
-        }
-
-        private void OnDestroy()
-        {
-            DestroyImmediate(mat);
-        }
-
         public override string DisplayName => "Tonemapping";
-
-        public override void Apply(PostFXStack stack)
-        {
-            stack.Buffer.Blit(stack.SourceBuffer, stack.TargetBuffer, mat);
-        }
+        public override string ShaderName => EffectDir + "ACES";
     }
 }

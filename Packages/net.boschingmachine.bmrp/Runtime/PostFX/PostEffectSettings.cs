@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BMRP.Runtime
+namespace BMRP.Runtime.PostFX
 {
     public abstract class PostEffectSettings : ScriptableObject
     {

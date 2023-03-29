@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BMRP.Runtime.PostFX;
 using UnityEngine;
 
 namespace BMRP.Runtime

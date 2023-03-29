@@ -1,7 +1,8 @@
 using UnityEngine;
 
-namespace BMRP.Runtime
+namespace BMRP.Runtime.PostFX
 {
+    [System.Serializable]
     public abstract class PostEffect : ScriptableObject
     {
         [SerializeField] private bool enabled = true;
