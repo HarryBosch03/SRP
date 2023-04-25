@@ -4,6 +4,6 @@ namespace BMRP.Runtime.PostFX
     public class AcesEffect : PostEffectBlit
     {
         public override string DisplayName => "Tonemapping";
-        public override string ShaderName => EffectDir + "ACES";
+        public override string ShaderName => InternalDirectory + "ACES";
     }
 }

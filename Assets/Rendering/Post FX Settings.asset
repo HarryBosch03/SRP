@@ -1,5 +1,54 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6587710487500360467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3357560b2e00420e9f6d19f1f43b2203, type: 3}
+  m_Name: Bloom
+  m_EditorClassIdentifier: 
+  enabled: 1
+  levels: 3
+  threshold:
+    mat: {fileID: 0}
+    propertyName: _Threshold
+    value: 1.1
+  strength:
+    mat: {fileID: 0}
+    propertyName: _Strength
+    value: 0.3
+--- !u!114 &-4072707588232998186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ac7889794384f76b5267254bb2c6c9a, type: 3}
+  m_Name: Downscale
+  m_EditorClassIdentifier: 
+  enabled: 0
+  factor: 4
+--- !u!114 &-2359307245197917819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b5eac59f464c0448ae99226c1bd2e66, type: 3}
+  m_Name: Tonemapping
+  m_EditorClassIdentifier: 
+  enabled: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12,6 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c784f70d318bcce45a34fd1a307629b5, type: 3}
   m_Name: Post FX Settings
   m_EditorClassIdentifier: 
-  targetVerticalResolution: 270
   effects:
-  - {fileID: 0}
+  - {fileID: -4072707588232998186}
+  - {fileID: -6587710487500360467}
+  - {fileID: -2359307245197917819}

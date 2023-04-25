@@ -19,7 +19,7 @@ Shader "BMRP/Post Process/ACES"
 
             float4 frag (v2f i) : SV_Target
             {
-                float4 col = tex2D(_MainTex, i.uv);
+                float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 return float4(AcesTonemap(unity_to_ACES(col.rgb)), col.a);
             }
             ENDHLSL

@@ -21,7 +21,7 @@ Shader "BMRP/Post Process/Downscale"
 
 			float4 frag (v2f i) : SV_Target
 			{
-				float3 col = tex2D(_MainTex, Downscale(i.uv, _MaxV, _MainTex_TexelSize)).rgb;
+				float3 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, Downscale(i.uv, _MaxV, _MainTex_TexelSize)).rgb;
 
 				return float4(col, 1.0);
 			}

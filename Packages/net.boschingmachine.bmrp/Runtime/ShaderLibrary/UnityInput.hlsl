@@ -23,9 +23,19 @@ CBUFFER_END
 float4x4 unity_MatrixVP;
 float4x4 unity_MatrixV;
 float4x4 glstate_matrix_projection;
+float4x4 unity_CameraToWorld;
 
 float4 screenSize;
 
 float3 _WorldSpaceCameraPos;
 float4 _ProjectionParams;
 float4 _ScreenParams;
+
+#define TEX(name) \
+TEXTURE2D(name); \
+SAMPLER(sampler ## name); \
+float4 name ## _TexelSize;
+
+TEX(_DepthTex);
+
+float4 _ZBufferParams;

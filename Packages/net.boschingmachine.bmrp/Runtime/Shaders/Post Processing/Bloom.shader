@@ -1,66 +1,48 @@
 Shader "BMRP/Post Process/Bloom"
 {
-	Properties
-	{
-		[HideInInspector] _MainTex ("Texture", 2D) = "white" {}
-		_MaxV ("Max Vertical Resolution", int) = 32
-		_Threshold ("Threshold", float) = 1.1
-		_Strength ("Strength", float) = 2.0
-	}
-	SubShader
-	{
-		Cull Off ZWrite Off ZTest Always
-		
-		Pass
-		{
-			HLSLPROGRAM
-			#pragma vertex vert
-			#pragma fragment frag
-			
-			#include "Common.hlsl"
+    Properties
+    {
+        [HideInInspector] _MainTex ("Texture", 2D) = "white" {}
+        _Threshold ("Threshold", float) = 1.1
+        _Strength ("Strength", float) = 2.0
+    }
+    SubShader
+    {
+        Cull Off ZWrite Off ZTest Always
 
-			int _MaxV;
-			float _Threshold;
-			float _Strength;
+        Pass
+        {
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
 
-			static const int BlurSamples = 16;
+            #include "Common.hlsl"
 
-			float Falloff (float2 uv)
-			{
-				float dist = length(uv) / BlurSamples;
-				return pow(2.718, -4.0 * dist * dist);
-			}
-			
-			float4 frag (v2f i) : SV_Target
-			{
-				float3 base = tex2D(_MainTex, i.uv).rgb;
+            float _Threshold;
+            float _Strength;
+            float2 _Axis = float2(1.0, 0.0);
 
-				float3 sample = 0.0;
-				
-				for (int j = 0; j < BlurSamples; j++)
-				{
-					for (int k = 0; k < BlurSamples; k++)
-					{
-						int x = j - BlurSamples / 2;
-						int y = k - BlurSamples / 2;
+            static const float weights[] =
+            {
+                0.01621622, 0.05405405, 0.12162162, 0.19459459, 0.22702703,
+                0.19459459, 0.12162162, 0.05405405, 0.01621622
+            };
 
-						float aspect = _MainTex_TexelSize.z / _MainTex_TexelSize.w;
-						float2 res = float2(aspect * _MaxV, _MaxV);
-						
-						float2 offset = float2(x, y) / res;
-						float2 uv = Downscale(i.uv + offset, _MaxV, _MainTex_TexelSize);
-						float3 col = tex2D(_MainTex, uv).rgb * Falloff(float2(x, y));
-						sample += max(col - _Threshold, 0.0) * _Strength;
-					}
-				}
+            float4 frag(v2f i) : SV_Target
+            {
+                float3 bloom = 0.0;
+                for (int x = 0; x < 9; x++)
+                {
+                    int y = x - 4;
+                    float weight = weights[x];
+                    float2 offset = _Axis * y * _MainTex_TexelSize.xy;
+                    float3 sample = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + offset).rgb;
+                    bloom += max(sample - _Threshold, 0.0) * _Strength * weight;
+                }
 
-				sample /= BlurSamples * BlurSamples;
-
-				float3 col = base + sample;
-				
-				return float4(col, 1.0);
-			}
-			ENDHLSL
-		}
-	}
+                return float4(bloom, 1.0);
+            }
+            ENDHLSL
+        }
+    }
 }

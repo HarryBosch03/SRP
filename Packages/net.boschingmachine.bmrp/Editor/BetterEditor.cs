@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using BMRP.Runtime;
+﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace Code.Scripts.Editor
+namespace BMRP.Editor
 {
     public abstract class BetterEditor<T> : BetterEditor where T : Object
     {
@@ -14,57 +13,71 @@ namespace Code.Scripts.Editor
 
     public abstract class BetterEditor : UnityEditor.Editor
     {
-        private static readonly Dictionary<string, bool> FoldoutStates = new();
+        protected readonly FoldoutStateGroup foldoutState = new();
 
-        protected static void Section(string name, System.Action bodyCallback) => Section(name, bodyCallback, s => s);
-        protected static void SectionWithoutBackground(string name, System.Action bodyCallback) => Section(name, bodyCallback, s => GUIStyle.none);
-        protected static void Section(string name, System.Action bodyCallback, System.Func<GUIStyle, GUIStyle> style)
+        protected void OnEnable()
         {
-            Section(name, () => { }, bodyCallback, style);
+            foldoutState.Initialize(target);
         }
 
-        protected static void Section(string reference, System.Action headerCallback, System.Action bodyCallback, System.Func<GUIStyle, GUIStyle> style)
+        protected class Section : IDisposable
         {
-            using var section = new EditorGUILayout.VerticalScope(style(EditorStyles.helpBox));
-            var indent = EditorGUI.indentLevel++;
-            
-            if (Foldout(reference, headerCallback)) bodyCallback();
+            private readonly EditorGUILayout.VerticalScope v;
 
-            EditorGUI.indentLevel = indent;
-        }
-
-        protected static bool Foldout(string name)
-        {
-            return Foldout(name, () => {});
-        }
-
-        protected static bool Foldout(string reference, System.Action headerCallback)
-        {
-            var get = GetFoldoutState(reference);
-
-            bool set;
-            using (new EditorGUILayout.HorizontalScope())
+            public Section()
             {
-                set = EditorGUILayout.Foldout(get, reference, true);
-                headerCallback();
+                v = new EditorGUILayout.VerticalScope(EditorStyles.helpBox);
             }
-            SetFoldoutState(reference, set);
-            return set;
+
+            public void Dispose()
+            {
+                v.Dispose();
+            }
         }
 
-        private static bool GetFoldoutState(string name)
+        protected void FoldoutSection(int key, string label, Action callback, bool toggleOnLabelClick = true)
         {
-            name = Util.SimplifyName(name);
-            if (!FoldoutStates.ContainsKey(name)) FoldoutStates.Add(name, true);
-            return FoldoutStates[name];
+            using (new Section())
+            {
+                Foldout(key, label, callback, toggleOnLabelClick);
+            }
         }
 
-        private static void SetFoldoutState(string name, bool state)
+        protected void Foldout(int key, string label, Action callback, bool toggleOnLabelClick = true)
         {
-            name = Util.SimplifyName(name);
+            foldoutState[key] = EditorGUILayout.Foldout(foldoutState[key], label, toggleOnLabelClick);
+            if (!foldoutState[key]) return;
 
-            if (FoldoutStates.ContainsKey(name)) FoldoutStates[name] = state;
-            else FoldoutStates.Add(name, state);
+            using (new EditorGUI.IndentLevelScope())
+            {
+                callback();
+            }
+        }
+
+        public class FoldoutStateGroup
+        {
+            private readonly Dictionary<int, bool> states = new();
+            private int id;
+            
+            public void Initialize(Object target)
+            {
+                id = target.GetInstanceID();
+            }
+            
+            public bool this[int key]
+            {
+                get
+                {
+                    if (!states.ContainsKey(key)) states.Add(key, EditorPrefs.GetBool(id.ToString(), false));
+                    return states[key];
+                }
+                set
+                {
+                    if (states.ContainsKey(key)) states[key] = value;
+                    else states.Add(key, value);
+                    EditorPrefs.SetBool(id.ToString(), value);
+                }
+            }
         }
 
         protected static void Separator()
@@ -73,12 +86,13 @@ namespace Code.Scripts.Editor
             EditorGUI.DrawRect(new Rect(rect.x, rect.y + rect.height / 2.0f, rect.width, 1), new Color(1, 1, 1, 0.1f));
         }
 
-        public void Property(string propName, string label) => Property(propName, new GUIContent(label)); 
+        public void Property(string propName, string label) => Property(propName, new GUIContent(label));
+
         public void Property(string propName, GUIContent label = null)
         {
             EditorGUILayout.PropertyField(serializedObject.FindProperty(propName), label);
         }
-        
+
         public void Properties(params string[] propNames)
         {
             foreach (var propName in propNames)
@@ -87,9 +101,12 @@ namespace Code.Scripts.Editor
             }
         }
 
-        private System.Action<Rect> DefaultPropertyDraw(string prop, GUIContent label = null) => DefaultPropertyDraw(serializedObject.FindProperty(prop), label);
-        private static System.Action<Rect> DefaultPropertyDraw(SerializedProperty prop, GUIContent label = null) => r => EditorGUI.PropertyField(r, prop, label);
-        
+        private Action<Rect> DefaultPropertyDraw(string prop, GUIContent label = null) =>
+            DefaultPropertyDraw(serializedObject.FindProperty(prop), label);
+
+        private static Action<Rect> DefaultPropertyDraw(SerializedProperty prop, GUIContent label = null) =>
+            r => EditorGUI.PropertyField(r, prop, label);
+
         public void DefaultProperty(string propertyName, ResetCallbackProperty resetCallback)
         {
             DefaultProperty(propertyName, (GUIContent)null, resetCallback);
@@ -106,7 +123,7 @@ namespace Code.Scripts.Editor
             DefaultField(DefaultPropertyDraw(prop), () => resetCallback(prop));
         }
 
-        public static void DefaultField(System.Action<Rect> drawCallback, ResetCallback resetCallback)
+        public static void DefaultField(Action<Rect> drawCallback, ResetCallback resetCallback)
         {
             var icon = EditorGUIUtility.IconContent("d_Refresh@2x").image;
             var r = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
@@ -116,7 +133,7 @@ namespace Code.Scripts.Editor
 
             r.x += r.width;
             r.width = r.height * 2.0f;
-            
+
             if (GUI.Button(r, icon))
             {
                 resetCallback();
@@ -124,6 +141,7 @@ namespace Code.Scripts.Editor
         }
 
         public delegate void ResetCallback();
+
         public delegate void ResetCallbackProperty(SerializedProperty prop);
     }
 }

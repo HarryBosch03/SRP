@@ -1,5 +1,6 @@
 using BMRP.Runtime;
-using Code.Scripts.Editor;
+using BMRP.Runtime.Core;
+using BMRP.Runtime.Scene;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace BMRP.Editor
         
         public override void OnInspectorGUI()
         {
-            Section("Balance", () =>
+            FoldoutSection(0, "Balance", () =>
             {
                 DefaultProperty("exposureValue", "Exposure (EV)", p => p.floatValue = 0.0f);
                 DefaultProperty("contrastValue", "Contrast", p => p.floatValue = 1.0f);
@@ -28,7 +29,7 @@ namespace BMRP.Editor
 
             Separator();
 
-            Section("Blending", () =>
+            FoldoutSection(1, "Blending", () =>
             {
                 Properties("global", "weight", "blendDistance");
             });

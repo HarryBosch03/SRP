@@ -18,7 +18,7 @@ Shader "BMRP/Post Process/Dither"
 
             float4 frag (v2f i) : SV_Target
             {
-                float4 col = tex2D(_MainTex, i.uv);
+                float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 DITHER_COLOR(col, _MainTex);
                 return col;
             }

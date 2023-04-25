@@ -1,160 +1,129 @@
-using System;
 using System.Collections.Generic;
-using System.Management.Instrumentation;
+using System.Reflection;
 using BMRP.Runtime;
-using Code.Scripts.Editor;
 using UnityEditor;
 using UnityEngine;
-using System.Reflection;
 using BMRP.Runtime.PostFX;
-using Editorator.Editor;
-using UnityEditor.Experimental.GraphView;
+using UnityEditor.Compilation;
+using UnityEditorInternal;
 
 namespace BMRP.Editor
 {
     [CustomEditor(typeof(PostFXSettings))]
-    public class PostFXSettingsEditor : BetterEditor
+    public class PostFXSettingsEditor : BetterEditor<PostFXSettings>
     {
-        private PostFXSettings Target => target as PostFXSettings;
         private readonly List<PostEffect> buffer = new();
-
-        bool gSetFoldout;
-
+        
         public override void OnInspectorGUI()
         {
-            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
-            {
-                gSetFoldout = EditorGUILayout.Foldout(gSetFoldout, "General Settings", true);
-                if (gSetFoldout)
-                {
-                    base.OnInspectorGUI();
-                }
-            }
+            ReinstanceEffects();
 
+            buffer.Clear();
+            buffer.AddRange(Target.Effects);
             
-            
-            new FoldoutSection("General Settings").Body(() => { base.OnInspectorGUI(); }).Finish();
+            Foldout(0, "General Settings", () => { base.OnInspectorGUI(); });
 
-            new Separator();
+            Separator();
 
-            new FoldoutSection("Post Effect Settings").Body(() =>
+            Foldout(1, "Post Effect Settings", () =>
             {
-                Target.Effects.RemoveAll(e => !e);
-
                 foreach (var effect in Target.Effects)
                 {
                     DrawEffect(effect);
                 }
-
-                new Button()
-                {
-                    defaultContent = new GUIContent("Add..."),
-                    callback = AddNewEffectMenu
-                }.Finish();
-            }).Finish();
-
+            });
+            
             Target.Effects.Clear();
             Target.Effects.AddRange(buffer);
+        }
 
+        private void ReinstanceEffects()
+        {
+            var looseEffects = new List<PostEffect>();
+            looseEffects.AddRange(FindObjectsOfType<PostEffect>());
+
+            var assets = AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(Target));
+            foreach (var asset in assets)
+            {
+                if (asset is not PostEffect effect) continue;
+                looseEffects.Add(effect);
+            }
+
+            foreach (var looseEffect in looseEffects)
+            {
+                if (Target.Effects.Contains(looseEffect)) continue;
+                
+                if (Target.Effects.Exists(e => e.GetType() == looseEffects.GetType()))
+                {
+                    DestroyImmediate(looseEffect, true);
+                    continue;
+                }
+                Target.Effects.Add(looseEffect);
+            }
+
+            var dirty = false;
+            Target.ReinstanceEffects(effect =>
+            {
+                AssetDatabase.AddObjectToAsset(effect, Target);
+                dirty = true;
+            });
+
+            foreach (var effect in Target.Effects)
+            {
+                if (effect.name == effect.DisplayName) continue;
+                dirty = true;
+                effect.name = effect.DisplayName;
+            }
+
+            if (!dirty) return;
+            
+            AssetDatabase.SaveAssets();                
+            EditorUtility.SetDirty(Target);
             SceneView.RepaintAll();
         }
 
         private void DrawEffect(PostEffect effect)
         {
-            new FoldoutSection(effect.name).Header(r =>
+            using (new Section())
             {
-                GUI.Label(r, effect.name);
-
-                r.x += r.width - r.height * 2.0f;
-                r.width = r.height * 2.0f;
-                new Button()
+                var i = effect.GetInstanceID();
+                using (new EditorGUILayout.HorizontalScope())
                 {
-                    callback = () => buffer.Remove(effect)
-                }.EditorImage("TreeEditor.Trash").Finish(r);
-            }).Body(() =>
-            {
-                new Separator();
-                E.AllVisibleProperties(effect);
-            }).Finish();
-        }
+                    foldoutState[i] = EditorGUILayout.Foldout(foldoutState[i], effect.name, true);
 
-        private void AddNewEffectMenu()
-        {
-            var allTypes = Assembly.GetAssembly(typeof(PostEffect)).GetTypes();
-            var types = new List<System.Type>();
+                    GUILayout.FlexibleSpace();
 
-            foreach (var type in allTypes)
-            {
-                if (!type.IsClass) continue;
-                if (type.IsAbstract) continue;
-                if (!type.IsSubclassOf(typeof(PostEffect))) continue;
-
-                types.Add(type);
-            }
-
-            var labels = new string[types.Count];
-            var i = 0;
-            foreach (var type in types)
-            {
-                labels[i++] = type.Name;
-            }
-
-            var searchProvider = CreateInstance<SearchProvider>();
-            searchProvider.types = types;
-            searchProvider.callback = AddNewEffectCallback;
-            SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)),
-                searchProvider);
-        }
-
-        private void AddNewEffectCallback(System.Type type)
-        {
-            Undo.RecordObject(Target, "Add New Effect to Post Process Stack");
-
-            var dupes = 0;
-            foreach (var effect in Target.Effects)
-            {
-                if (effect.GetType() != type) continue;
-                dupes++;
-            }
-
-            var instance = (PostEffect)CreateInstance(type);
-            instance.name = instance.DisplayName;
-            if (dupes > 0) instance.name += $".{dupes + 1}";
-            buffer.Add(instance);
-
-            SceneView.RepaintAll();
-        }
-
-        public class SearchProvider : ScriptableObject, ISearchWindowProvider
-        {
-            public IEnumerable<System.Type> types;
-            public Action<System.Type> callback;
-
-            public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
-            {
-                var searchList = new List<SearchTreeEntry>();
-                searchList.Add(new SearchTreeGroupEntry(new GUIContent("List"), 0));
-
-                foreach (var type in types)
-                {
-                    var tmp = (PostEffect)CreateInstance(type);
-                    var name = tmp.DisplayName;
-                    DestroyImmediate(tmp);
-
-                    searchList.Add(new SearchTreeEntry(new GUIContent(name))
+                    if (GUILayout.Button("Move Prev"))
                     {
-                        level = 1,
-                        userData = type,
-                    });
+                        var j = buffer.FindIndex(e => e == effect);
+                        if (j > 0)
+                        {
+                            var a = buffer[j];
+                            var b = buffer[j - 1];
+
+                            buffer[j] = b;
+                            buffer[j - 1] = a;
+                        }
+                    }
+
+                    if (GUILayout.Button("Move Next"))
+                    {
+                        var j = buffer.FindIndex(e => e == effect);
+                        if (j < buffer.Count - 1)
+                        {
+                            var a = buffer[j];
+                            var b = buffer[j + 1];
+
+                            buffer[j] = b;
+                            buffer[j + 1] = a;
+                        }
+                    }
                 }
 
-                return searchList;
-            }
+                if (!foldoutState[i]) return;
 
-            public bool OnSelectEntry(SearchTreeEntry searchTreeEntry, SearchWindowContext context)
-            {
-                callback((System.Type)searchTreeEntry.userData);
-                return true;
+                var editor = CreateEditor(effect);
+                editor.OnInspectorGUI();
             }
         }
     }

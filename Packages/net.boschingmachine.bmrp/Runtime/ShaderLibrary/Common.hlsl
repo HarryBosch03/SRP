@@ -77,3 +77,10 @@ float cutoff = GET_PROP(_Cutoff); \
 clip(baseColor.a - cutoff);
 
 #define DITHER_COLOR(col, _Texture) col.rgb = ditherColor(col.rgb, i.uv * _Texture ## _TexelSize.zw)
+
+float SampleDepth(float2 uv)
+{
+    return Linear01Depth(SAMPLE_TEXTURE2D(_DepthTex, sampler_DepthTex, uv).r, _ZBufferParams);
+}
+
+#define SAMPLE_DEPTH(cpos) SampleDepth(cpos.xy / _ScreenParams.xy)

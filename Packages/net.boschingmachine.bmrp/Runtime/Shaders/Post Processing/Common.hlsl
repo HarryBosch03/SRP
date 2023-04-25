@@ -74,5 +74,6 @@ v2f vert (appdata v)
     return o;
 }
 
-sampler2D _MainTex;
+TEXTURE2D(_MainTex);
+SAMPLER(sampler_MainTex);
 float4 _MainTex_TexelSize;
