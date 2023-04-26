@@ -58,7 +58,7 @@ Varyings vert (Attributes i)
     o.pos = TransformWorldToHClip(positionWS);
     
     float wobble = GET_PROP(_Wobble);
-    o.pos.xy = Wobble(o.pos.xy, wobble);
+    o.pos.xy = Wobble(o.pos.xy / o.pos.w, wobble) * o.pos.w;
     
     float3 normal = TransformObjectToWorldNormal(i.normal);
 
@@ -72,7 +72,6 @@ Varyings vert (Attributes i)
     surface.viewDirection = normalize(_WorldSpaceCameraPos - positionWS);
 
     o.color = float4(GetLighting(surface), i.color.a);
-    
     return o;
 }
 
@@ -82,7 +81,7 @@ float4 frag (Varyings i) : SV_TARGET
     
     float4 baseMap = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.uv);
     float4 baseColor = baseMap * GET_PROP(_BaseColor);
-    DITHER_COLOR(baseColor, _BaseMap) * i.color;
+    baseColor.rgb = DITHER_COLOR(baseColor, _BaseMap) * i.color;
 
 #ifdef _ALPHA_DITHER
    CLIP_DITHER
@@ -90,5 +89,5 @@ float4 frag (Varyings i) : SV_TARGET
     CLIP_OTHER
 #endif
     
-    return baseColor;
+    return float4(baseColor);
 }

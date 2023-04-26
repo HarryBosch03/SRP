@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using BMRP.Runtime.Core.Passes;
 using BMRP.Runtime.PostFX;
 using BMRP.Runtime.Scene;
@@ -89,6 +90,7 @@ namespace BMRP.Runtime.Core
 
             SetGlobals();
             
+            
             foreach (var pass in passList) pass.Setup(this);
 
             Camera.depthTextureMode = DepthTextureMode.Depth;
@@ -97,6 +99,7 @@ namespace BMRP.Runtime.Core
         private void SetGlobals()
         {
             WobbleAmount.Value = Settings.globalVertexWobbleAmount;
+            ShaderProperty.SendAll(Buffer, WobbleAmount);
             ColorGradingVolume.SetWeights(this);
         }
 

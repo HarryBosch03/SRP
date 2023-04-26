@@ -16,5 +16,5 @@ MonoBehaviour:
     useDynamicBatching: 1
     useGPUInstancing: 1
     useSrpBatching: 1
-    globalVertexWobbleAmount: 12
+    globalVertexWobbleAmount: 6
     postFXSettings: {fileID: 11400000, guid: 3190c1e02ba1bdb48bdd8dee2975a089, type: 2}

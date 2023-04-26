@@ -25,8 +25,6 @@ float4x4 unity_MatrixV;
 float4x4 glstate_matrix_projection;
 float4x4 unity_CameraToWorld;
 
-float4 screenSize;
-
 float3 _WorldSpaceCameraPos;
 float4 _ProjectionParams;
 float4 _ScreenParams;

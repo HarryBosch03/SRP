@@ -30,7 +30,7 @@ float2 Wobble (float2 pos, float amount)
     if (_WobbleAmount == 0.0) return pos;
     
     amount *= _WobbleAmount;
-    return round(pos * screenSize.xy * 0.5f / amount) * screenSize.zw * 2.0f * amount;
+    return round(pos * _ScreenParams.xy * 0.5f / amount) / _ScreenParams.xy * 2.0f * amount;
 #else
     return pos;
 #endif
@@ -63,7 +63,8 @@ float3 ditherColor (float3 col, float2 pixelCoords)
     float3 upper = lower + (1.0 / 32.0);
     float3 diff = (col - lower) / (upper - lower);
     float3 d = dither(pixelCoords, diff);
-    return lerp(lower, upper, d);
+    col = lerp(lower, upper, d);
+    return col;
 }
 
 #define CLIP_DITHER \
@@ -76,7 +77,7 @@ clip(dither(i.pos.xy, pow(a, 2.0)).r * 2.0 - 1.0);
 float cutoff = GET_PROP(_Cutoff); \
 clip(baseColor.a - cutoff);
 
-#define DITHER_COLOR(col, _Texture) col.rgb = ditherColor(col.rgb, i.uv * _Texture ## _TexelSize.zw)
+#define DITHER_COLOR(col, _Texture) ditherColor(col.rgb, i.uv * _Texture ## _TexelSize.zw)
 
 float SampleDepth(float2 uv)
 {
@@ -84,3 +85,4 @@ float SampleDepth(float2 uv)
 }
 
 #define SAMPLE_DEPTH(cpos) SampleDepth(cpos.xy / _ScreenParams.xy)
+

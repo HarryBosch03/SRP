@@ -11,7 +11,7 @@ namespace BMRP.Runtime.Core.Passes
         public override void Setup(CameraRenderer renderer)
         {
             base.Setup(renderer);
-            Buffer.GetTemporaryRT(DepthTex, Renderer.Camera.pixelWidth, Renderer.Camera.pixelHeight, 32, FilterMode.Point, RenderTextureFormat.Depth);
+            Buffer.GetTemporaryRT(DepthTex, Renderer.Camera.pixelWidth, Renderer.Camera.pixelHeight, 32, FilterMode.Point, RenderTextureFormat.DefaultHDR);
         }
 
         protected override void OnExecute()

@@ -8,6 +8,8 @@ namespace BMRP.Runtime.Assets
     public class BmrPipelineAsset : RenderPipelineAsset
     {
         [SerializeField] private CameraRenderer.CameraSettings settings;
+
+        public CameraRenderer.CameraSettings Settings => settings;
         
         protected override RenderPipeline CreatePipeline()
         {

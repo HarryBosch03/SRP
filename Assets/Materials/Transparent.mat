@@ -11,6 +11,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: 493a6dffa624cbf47b4c1130a89f4dd0, type: 3}
   m_ValidKeywords:
   - _ALPHA_DITHER
+  - _POINT
   - _UVDISTORT
   - _WOBBLE
   m_InvalidKeywords: []
@@ -82,6 +83,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _Point: 1
     - _Reflectivity: 1
     - _Roughness: 1
     - _SmoothnessTextureChannel: 0
